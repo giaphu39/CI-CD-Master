@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
+    defaults: # không có lệnh này thì sẽ chạy trên current directory
       run:
         working-directory: ./first_pipeline
 
