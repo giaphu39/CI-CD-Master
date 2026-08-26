@@ -211,4 +211,14 @@ Nếu dự án của bạn chuyển sang sử dụng **GitLab CI/CD** (cấu hì
     ```
   * Thay đổi lệnh chạy app cho phù hợp với script được khai báo trong `package.json` của thư mục đó (ví dụ: dùng `npm run run` thay vì `npm start` nếu không định nghĩa script `start`).
 
+### ❓ Các dòng lệnh `actions/checkout@v4` và `actions/setup-node@v3` trong file workflow dùng để làm gì?
+* **Giải nghĩa chi tiết:**
+  * **`uses: actions/checkout@v4`**: Đây là Action chính thức của GitHub để **tải mã nguồn (checkout)** từ repository của bạn vào máy ảo (runner). Mặc định, máy ảo khởi động lên hoàn toàn trống trơn; bước này giúp lấy code của dự án về máy ảo để có thể chạy kiểm thử hoặc build.
+  * **`uses: actions/setup-node@v3`**: Action này dùng để cài đặt môi trường chạy **Node.js** trên máy ảo.
+  * **`with:`**: Truyền các tham số cấu hình cho Action setup-node:
+    * `node-version: '16'`: Chỉ định phiên bản Node.js cần cài đặt (trong trường hợp này là phiên bản 16).
+    * `cache: 'npm'`: Bật tính năng lưu bộ nhớ đệm (caching) cho các file tải về từ thư mục `node_modules`. Giúp các lần chạy workflow sau này nhanh hơn rất nhiều vì không cần tải lại tất cả gói thư viện từ internet.
+    * `cache-dependency-path: './package-lock.json'`: Đường dẫn chỉ tới file `package-lock.json`. GitHub Actions sẽ dựa vào file này để biết khi nào danh sách thư viện có sự thay đổi (để tạo cache mới hoặc tiếp tục sử dụng cache cũ).
+
+
 
