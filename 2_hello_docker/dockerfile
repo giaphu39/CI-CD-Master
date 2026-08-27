@@ -1,0 +1,9 @@
+# cần chạy file js nên cần cài node
+FROM node:20-alpine
+# set working directory
+WORKDIR /app
+# copy file js vào working directory
+# first are current file to copy , second are destination file
+COPY . .
+# run file js
+CMD node hello.js

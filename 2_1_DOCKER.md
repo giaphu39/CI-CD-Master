@@ -4,6 +4,34 @@ Tài liệu này hệ thống hóa toàn bộ kiến thức về **Docker** từ
 
 ---
 
+## 📌 Mục Lục (Table of Contents)
+
+1. [1. Ẩn Dụ: Hộp Cơm Trưa Ma Thuật (Lunchbox Metaphor)](#1-ẩn-dụ-hộp-cơm-trưa-ma-thuật-lunchbox-metaphor)
+2. [2. Đặc Tính và Lợi Ích Cốt Lõi của Docker](#2-đặc-tính-và-lợi-ích-cốt-lõi-của-docker)
+3. [3. So Sánh Chi Tiết: Docker Container vs. Virtual Machine (VM)](#3-so-sánh-chi-tiết-docker-container-vs-virtual-machine-vm)
+    * [Sơ đồ Kiến trúc Hệ thống](#sơ-đồ-kiến-trúc-hệ-thống)
+    * [Bảng so sánh kỹ thuật chi tiết](#bảng-so-sánh-kỹ-thuật-chi-tiết)
+4. [4. Các Khái Niệm Cấu Thành Bên Trong Docker](#4-các-khái-niệm-cấu-thành-bên-trong-docker)
+5. [5. Các Thực Hành Nâng Cao & Công Cụ Bổ Trợ (Best Practices)](#5-các-thực-hành-nâng-cao--công-cụ-bổ-trợ-best-practices)
+    * [5.1. Cơ chế lưu bộ nhớ đệm (Dependency Caching Layer)](#51-cơ-chế-lưu-bộ-nhớ-đệm-dependency-caching-layer)
+    * [5.2. Bảo mật phi Root (Non-root User)](#52-bảo-mật-phi-root-non-root-user)
+    * [5.3. Đóng gói đa giai đoạn (Multi-stage Build)](#53-đóng-gói-đa-giai-đoạn-multi-stage-build)
+    * [5.4. Docker Compose & Docker Init](#54-docker-compose--docker-init)
+    * [5.5. Neon Local (Môi trường DB cục bộ tạm thời)](#55-neon-local-môi-trường-db-cục-bộ-tạm-thời)
+6. [6. Kiến Trúc 3 Thành Phần Cốt Lõi (Docker Architecture)](#6-kiến-trúc-3-thành-phần-cốt-lõi-docker-architecture)
+    * [6.1. Chi tiết các thành phần:](#61-chi-tiết-các-thành-phần)
+    * [Mở rộng: "Daemon" là gì?](#mở-rộng-daemon-là-gì-có-giống-daemon-tools-hồi-xưa-hay-dùng)
+    * [Luồng hoạt động phối hợp:](#luồng-hoạt-động-phối-hợp)
+7. [7. Ba Quy Trình Làm Việc (Workflows) Với Docker](#7-ba-quy-trình-làm-việc-workflows-với-docker)
+    * [7.1. Quy trình làm việc thủ công (Manual Workflow)](#71-quy-trình-làm-việc-thủ-công-manual-workflow)
+    * [7.2. Quy trình tự động hóa cục bộ (Docker Compose & Neon Local)](#72-quy-trình-tự-động-hóa-cục-bộ-docker-compose--neon-local)
+    * [7.3. Quy trình tự động hóa hoàn toàn trong CI/CD (GitHub Actions)](#73-quy-trình-tự-động-hóa-hoàn-toàn-trong-cicd-github-actions)
+8. [8. Kiến Thức Mở Rộng: Docker Hoạt Động Dưới Hạ Tầng Như Thế Nào?](#8-kiến-thức-mở-rộng-docker-hoạt-động-dưới-hạ-tầng-như-thế-nào)
+    * [8.1. Namespaces và cgroups (Control Groups)](#81-namespaces-và-cgroups-control-groups)
+    * [8.2. Cơ chế lưu trữ Layered File System (UnionFS)](#82-cơ-chế-lưu-trữ-layered-file-system-unionfs)
+
+---
+
 ## 🍱 1. Ẩn Dụ: Hộp Cơm Trưa Ma Thuật (Lunchbox Metaphor)
 
 Hãy tưởng tượng bạn chuẩn bị một hộp cơm trưa mang đi làm. 
