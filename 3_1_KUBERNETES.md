@@ -15,7 +15,7 @@ Tài liệu này cung cấp cái nhìn toàn diện về **Kubernetes (K8s)** d�
     * [3.1. Single-container Pod (Mô hình tiêu chuẩn)](#31-single-container-pod-mô-hình-tiêu-chuẩn)
     * [3.2. Multi-container Pod (Mô hình đa container)](#32-multi-container-pod-mô-hình-đa-container)
     * [3.3. Init Containers (Container Khởi Tạo)](#33-init-containers-container-khởi-tạo)
-4. [4. Cơ Chế Tự Phục Hồi: Điều Gì Xảy Ra Nếu Chưa Có ReplicaSet?](#4-cơ-chế-tự-phục-hồi-điều-gì-xảy-ra-nếu-chưa-có-replicaset)
+4. [4. Cơ Chế Tự Phục Hồi: Khái Niệm Replicas & Vai Trò Của ReplicaSet](#4-cơ-chế-tự-phục-hồi-khái-niệm-replicas--vai-trò-của-replicaset)
 5. [5. Service: Giải Quyết Vấn Đề IP Biến Động Của Pods](#5-service-giải-quyết-vấn-đề-ip-biến-động-của-pods)
 6. [6. Ingress: Cổng Vào HTTP/HTTPS Cho Toàn Bộ Cluster](#6-ingress-cổng-vào-httphttps-cho-toàn-bộ-cluster)
 7. [7. ConfigMaps & Secrets: Quản Lý Cấu Hình & Bảo Mật Động](#7-configmaps--secrets-quản-lý-cấu-hình--bảo-mật-động)
@@ -177,9 +177,32 @@ Mẫu thiết kế multi-container phổ biến nhất là **Sidecar Pattern**:
 
 ---
 
-## 🔄 4. Cơ Chế Tự Phục Hồi: Điều Gì Xảy Ra Nếu Chưa Có ReplicaSet?
+## 🔄 4. Cơ Chế Tự Phục Hồi: Khái Niệm Replicas & Vai Trò Của ReplicaSet
 
-Để hiểu giá trị của ReplicaSet và Deployment, hãy hình dung kịch bản khi ta **chỉ triển khai các Pod đơn lẻ (thường gọi là Bare Pod hay Static Pod)**:
+Để hiểu cách Kubernetes vận hành ổn định trên môi trường sản xuất (production), chúng ta cần nắm rõ khái niệm **Replicas** (bản sao) và tại sao các bộ điều phối (Controllers) như **ReplicaSet** hay **Deployment** lại vô cùng quan trọng.
+
+### 4.1. Replicas (Bản sao) là gì trong Kubernetes?
+
+Trong Kubernetes, **Replicas** là các bản sao giống hệt nhau của cùng một Pod, chạy đồng thời để phục vụ cho cùng một ứng dụng/dịch vụ.
+
+#### 💡 Tại sao cần chạy nhiều Replicas?
+*   **Tăng tính sẵn sàng cao (High Availability):** Nếu một Pod hoặc một Worker Node bị sập (do lỗi phần cứng, mất kết nối mạng, tràn bộ nhớ), các Pod bản sao chạy trên các Node khác vẫn hoạt động để phục vụ người dùng mà không gây gián đoạn dịch vụ.
+*   **Cân bằng tải (Load Balancing):** K8s Service sẽ tự động chia đều lưu lượng truy cập (traffic) của người dùng đến tất cả các Pod bản sao này, giúp hệ thống chịu tải tốt hơn và giảm nguy cơ sập do quá tải một máy chủ đơn lẻ.
+*   **Cập nhật không gián đoạn (Zero-Downtime Deployment):** Khi bạn deploy phiên bản mới, K8s sẽ cập nhật dần dần từng bản sao một (Rolling Update) để tại bất kỳ thời điểm nào cũng luôn có bản sao sẵn sàng chạy.
+
+#### ⚙️ Cơ chế duy trì số lượng Replicas (Desired State vs. Actual State)
+Kubernetes hoạt động dựa trên cơ chế liên tục so sánh và điều hòa trạng thái:
+*   **Desired State (Trạng thái mong muốn):** Số lượng bản sao bạn khai báo trong file YAML (ví dụ: `replicas: 2` hoặc `replicas: 3` trong Deployment).
+*   **Actual State (Trạng thái thực tế):** Số lượng Pod thực tế đang sống và chạy trong cụm (cluster).
+*   **Reconciliation Loop (Vòng lặp tự điều hòa):** Controller Manager của Kubernetes liên tục giám sát cluster để đảm bảo hai trạng thái này khớp nhau:
+    *   Nếu **Actual < Desired** (ví dụ: bạn muốn 3 bản sao nhưng có 1 Pod bị crash hoặc sập Node): K8s lập tức tạo thêm Pod mới để thay thế.
+    *   Nếu **Actual > Desired** (ví dụ: bạn thay đổi cấu hình scale-down từ 3 xuống 2): K8s sẽ chủ động tắt bớt Pod dư thừa để giải phóng tài nguyên.
+
+---
+
+### 4.2. Điều gì xảy ra khi chưa có ReplicaSet (Bare Pod / Static Pod)?
+
+Hãy hình dung kịch bản khi ta **chỉ triển khai các Pod đơn lẻ trực tiếp (Bare Pod)** mà không thông qua bất kỳ bộ quản lý nào:
 
 ```
                   ┌────────────────────────┐
@@ -195,12 +218,14 @@ Mẫu thiết kế multi-container phổ biến nhất là **Sidecar Pattern**:
             K8s không tự khởi tạo lại Bare Pod ở Node khác
 ```
 
-### Khi chưa có ReplicaSet (Bare Pod):
-1.  **Không có tính năng Tự Phục Hồi (Self-healing) ở mức Node:** Nếu Worker Node chứa Pod đó bị mất điện, lỗi phần cứng, hoặc bị xóa đột ngột, Pod sẽ chết vĩnh viễn. Không có thành phần nào đứng ra tạo lại Pod đó trên Node khác.
+1.  **Không có tính năng Tự Phục Hồi (Self-healing) ở mức Node:** Nếu Worker Node chứa Pod đó bị mất điện, lỗi phần cứng, hoặc bị xóa đột ngột, Pod sẽ chết vĩnh viễn. Không có thành phần nào đứng ra tự tạo lại Pod đó trên Node khác.
 2.  **Không thể Scale tự động:** Bạn không thể khai báo "Tôi muốn chạy 3 bản sao". Nếu muốn 3 cái, bạn phải viết 3 file cấu hình Pod khác nhau với 3 cái tên khác nhau và deploy thủ công.
 3.  **Lỗi ứng dụng dẫn đến mất dịch vụ:** Khi Pod bị xóa nhầm bởi quản trị viên, hệ thống sẽ mất đi tiến trình đó mà không có cơ chế tự động bù đắp.
 
-### Khi có ReplicaSet:
+---
+
+### 4.3. Khi có ReplicaSet
+
 *   **ReplicaSet** là một controller giám sát. Nó liên tục kiểm tra số lượng Pod thực tế đang chạy so với số lượng bản sao mong muốn (`replicas`).
 *   Nếu bạn khai báo `replicas: 3`, ReplicaSet sẽ đảm bảo luôn luôn có đúng 3 Pod hoạt động.
 *   Nếu 1 Pod bị chết do Node lỗi, ReplicaSet sẽ ngay lập tức phát lệnh cho Scheduler tìm kiếm Node khác khỏe mạnh để **khởi tạo ngay 1 Pod mới thay thế**, duy trì trạng thái 3 bản sao ổn định.

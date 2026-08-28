@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service # cung cấp IP vĩnh viễn chung cho các pod
+metadata:
+  name: devops-kubernetes-api-service
+  labels:
+    app: devops-kubernetes-api
+spec:
+  selector:
+    app: kubernetes-demo-api
+  ports:
+    - protocol: TCP
+      port: 3000 # Service port
+      targetPort: 3000 # Container port
+  type: NodePort # change to LoadBalancer if running in cloud
+  # NodePort: truy cập qua port máy worker
