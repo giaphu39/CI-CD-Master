@@ -4,7 +4,34 @@ Tài liệu này ghi lại chi tiết các bước chuẩn bị ứng dụng, đ
 
 ---
 
-## GIAI ĐOẠN 1: CHUẨN BỊ ỨNG DỤNG & ĐÓNG GÓI DOCKER
+## 📌 Mục Lục (Table of Contents)
+
+- [Giai Đoạn 1: Chuẩn Bị Ứng Dụng & Đóng Gói Docker](#giai-đoạn-1-chuẩn-bị-ứng-dụng-đóng-gói-docker)
+  - [Bước 1: Khởi tạo Project & Cài đặt Express](#bước-1-khởi-tạo-project-cài-đặt-express)
+  - [Bước 2: Cài đặt công cụ kubectl (Kubernetes Command-Line Tool)](#bước-2-cài-đặt-công-cụ-kubectl-kubernetes-command-line-tool)
+  - [Bước 3: Cài đặt và cấu hình Minikube](#bước-3-cài-đặt-và-cấu-hình-minikube)
+  - [Bước 4: Viết mã nguồn ứng dụng (`index.js`)](#bước-4-viết-mã-nguồn-ứng-dụng-indexjs)
+  - [Bước 5: Cấu hình `package.json`](#bước-5-cấu-hình-packagejson)
+  - [Bước 6: Tạo Dockerfile và Docker Compose](#bước-6-tạo-dockerfile-và-docker-compose)
+  - [Bước 7: Build và chạy thử nghiệm cục bộ với Docker Compose](#bước-7-build-và-chạy-thử-nghiệm-cục-bộ-với-docker-compose)
+  - [Bước 8: Đẩy Container Image lên Docker Hub](#bước-8-đẩy-container-image-lên-docker-hub)
+- [Giai Đoạn 2: Triển Khai Lên Kubernetes](#giai-đoạn-2-triển-khai-lên-kubernetes)
+  - [Bước 9: Tạo cấu hình Manifests cho Kubernetes (`k8s/`)](#bước-9-tạo-cấu-hình-manifests-cho-kubernetes-k8s)
+  - [Bước 10: Khởi chạy cụm Minikube](#bước-10-khởi-chạy-cụm-minikube)
+  - [Bước 11: Kiểm tra trạng thái kết nối cụm](#bước-11-kiểm-tra-trạng-thái-kết-nối-cụm)
+  - [Bước 12: Áp dụng (Apply) cấu hình lên Kubernetes](#bước-12-áp-dụng-apply-cấu-hình-lên-kubernetes)
+  - [Bước 13: Kiểm tra và giám sát kết quả chạy](#bước-13-kiểm-tra-và-giám-sát-kết-quả-chạy)
+- [Giai Đoạn 3: Tự Động Hóa Triển Khai Với Script Tự Động](#giai-đoạn-3-tự-động-hóa-triển-khai-với-script-tự-động)
+  - [Bước 14: Tạo file script triển khai tự động](#bước-14-tạo-file-script-triển-khai-tự-động)
+  - [Bước 15: Cấu hình lệnh chạy trong `package.json`](#bước-15-cấu-hình-lệnh-chạy-trong-packagejson)
+  - [Bước 16: Khởi chạy Service Tunnel để truy cập ứng dụng](#bước-16-khởi-chạy-service-tunnel-để-truy-cập-ứng-dụng)
+- [Giai Đoạn 4: Sơ Đồ Luồng Hoạt Động Tự Động (Diagram)](#giai-đoạn-4-sơ-đồ-luồng-hoạt-động-tự-động-diagram)
+  - [Chú thích chi tiết luồng chạy](#chú-thích-chi-tiết-luồng-chạy)
+- [Mục Hỏi Đáp (Q&A) - Các Lỗi Thường Gặp Và Cách Giải Quyết](#mục-hỏi-đáp-qa---các-lỗi-thường-gặp-và-cách-giải-quyết)
+
+---
+
+## Giai Đoạn 1: Chuẩn Bị Ứng Dụng & Đóng Gói Docker
 
 ### Bước 1: Khởi tạo Project & Cài đặt Express
 Trước tiên, chúng ta cần cài đặt thư viện Web Framework **Express** cho ứng dụng Node.js của mình:
@@ -116,7 +143,7 @@ Kiểm tra xem ứng dụng có chạy thành công tại địa chỉ `http://l
 
 ---
 
-## GIAI ĐOẠN 2: TRIỂN KHAI LÊN KUBERNETES
+## Giai Đoạn 2: Triển Khai Lên Kubernetes
 
 ### Bước 9: Tạo cấu hình Manifests cho Kubernetes (`k8s/`)
 Tạo một thư mục tên là `k8s` trong dự án. Tại đây, chúng ta sẽ định nghĩa các tài nguyên Kubernetes:
@@ -179,7 +206,7 @@ kubectl apply -f k8s/
 
 ---
 
-## GIAI ĐOẠN 3: TỰ ĐỘNG HÓA TRIỂN KHAI VỚI SCRIPT TỰ ĐỘNG
+## Giai Đoạn 3: Tự Động Hóa Triển Khai Với Script Tự Động
 
 Trong quá trình phát triển, việc thực hiện thủ công các công việc như build Docker image, push lên Docker Hub, apply manifest lên Kubernetes và kiểm tra trạng thái pods diễn ra lặp đi lặp lại. Để tiết kiệm thời gian, chúng ta sẽ viết một script tự động hóa quy trình này.
 
@@ -188,7 +215,7 @@ Trong quá trình phát triển, việc thực hiện thủ công các công vi�
 Tùy vào môi trường terminal bạn đang sử dụng, bạn có thể tạo một trong hai file sau (hoặc cả hai) trong thư mục dự án Node.js:
 
 #### Cách 1: Sử dụng Bash Script (`deploy.sh` - Dành cho Git Bash, Linux, macOS)
-Tạo file [deploy.sh](file:///E:/08_Project/Devops_Course/CI_CD_Master/3_1_Kubernetes-demo/deploy.sh):
+Tạo file [deploy.sh](./3_1_Kubernetes-demo/deploy.sh):
 ```bash
 set -e # Dừng script ngay lập tức nếu bất kỳ lệnh nào bị lỗi
 
@@ -218,7 +245,7 @@ kubectl get services ${SERVICE_NAME}
 ```
 
 #### Cách 2: Sử dụng PowerShell Script (`deploy.ps1` - Dành cho Windows PowerShell)
-Tạo file [deploy.ps1](file:///E:/08_Project/Devops_Course/CI_CD_Master/3_1_Kubernetes-demo/deploy.ps1):
+Tạo file [deploy.ps1](./3_1_Kubernetes-demo/deploy.ps1):
 ```powershell
 $ErrorActionPreference = "Stop"
 
@@ -248,7 +275,7 @@ kubectl get services $SERVICE_NAME
 ```
 
 ### Bước 15: Cấu hình lệnh chạy trong `package.json`
-Thêm script deploy vào mục `"scripts"` của file [package.json](file:///E:/08_Project/Devops_Course/CI_CD_Master/3_1_Kubernetes-demo/package.json):
+Thêm script deploy vào mục `"scripts"` của file [package.json](./3_1_Kubernetes-demo/package.json):
 ```json
 "scripts": {
   "deploy": "powershell -ExecutionPolicy Bypass -File deploy.ps1",
@@ -276,7 +303,7 @@ Lệnh này sẽ thiết lập đường truyền (tunnel) và tự động mở
 
 ---
 
-## GIAI ĐOẠN 4: SƠ ĐỒ LUỒNG HOẠT ĐỘNG TỰ ĐỘNG (DIAGRAM)
+## Giai Đoạn 4: Sơ Đồ Luồng Hoạt Động Tự Động (Diagram)
 
 Dưới đây là sơ đồ trực quan hóa toàn bộ luồng hoạt động tự động khi thực thi script tự động hóa cho đến khi truy cập ứng dụng:
 
@@ -327,11 +354,11 @@ graph TD
 2. **Build Docker Image**: Script `deploy.ps1` chạy lệnh `docker build` chỉ đạo Docker daemon đọc file `Dockerfile`. Dockerfile này copy file code `index.js`, `package.json` (bỏ qua `node_modules` nhờ file `.dockerignore`) rồi cài sạch các package cần thiết để đóng gói thành image local.
 3. **Push lên Docker Hub**: Script gọi lệnh `docker push` đẩy image này lên Docker Hub trực tuyến để lưu trữ.
 4. **Apply tài nguyên vào K8s**: Script chạy `kubectl apply -f k8s/` chỉ đạo Kubernetes API Server đọc các file định nghĩa:
-   - [deployment.yaml](file:///E:/08_Project/Devops_Course/CI_CD_Master/3_1_Kubernetes-demo/k8s/deployment.yaml): Ra lệnh tải image từ Docker Hub về để chạy lên 2 Pods chứa container Node.js.
-   - [services.yaml](file:///E:/08_Project/Devops_Course/CI_CD_Master/3_1_Kubernetes-demo/k8s/services.yaml): Tạo ra một Service NodePort, sử dụng nhãn `selector` khớp hoàn toàn với `labels` của các Pod để điều hướng lưu lượng truy cập.
+   - [deployment.yaml](./3_1_Kubernetes-demo/k8s/deployment.yaml): Ra lệnh tải image từ Docker Hub về để chạy lên 2 Pods chứa container Node.js.
+   - [services.yaml](./3_1_Kubernetes-demo/k8s/services.yaml): Tạo ra một Service NodePort, sử dụng nhãn `selector` khớp hoàn toàn với `labels` của các Pod để điều hướng lưu lượng truy cập.
 5. **Truy cập thử**: Khi chạy `minikube service devops-kubernetes-api-service`, Minikube thiết lập một Proxy Tunnel kết nối cổng máy ảo với cổng local của máy tính bạn, giúp bạn truy cập trực tiếp ứng dụng Node.js từ trình duyệt web local.
 
-## MỤC HỎI ĐÁP (QA) - CÁC LỖI THƯỜNG GẶP VÀ CÁCH GIẢI QUYẾT
+## Mục Hỏi Đáp (Q&A) - Các Lỗi Thường Gặp và Cách Giải Quyết
 
 ### Q1: Tại sao Pod của tôi bị báo lỗi trạng thái `CrashLoopBackOff` hoặc `Error`?
 * **Nguyên nhân**: Trong file `k8s/deployment.yaml` gốc, cấu hình image đang trỏ tới `jsmasterypro/kubernetes-demo-api:latest`. Đây là image mẫu có sẵn của khóa học và nó được lập trình yêu cầu phải có một biến môi trường cấu hình cơ sở dữ liệu Neon (`DATABASE_URL`). Do bạn không khai báo biến môi trường này trong cấu hình, tiến trình Node.js bên trong container bị crash ngay lập tức khi vừa khởi chạy, khiến Kubernetes liên tục khởi động lại Pod (`CrashLoopBackOff`).

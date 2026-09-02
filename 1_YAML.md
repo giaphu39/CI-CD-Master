@@ -4,10 +4,30 @@ Tài liệu này cung cấp hướng dẫn nhanh về cú pháp YAML, các từ 
 
 ---
 
+## 📌 Mục Lục (Table of Contents)
+
+- [1. Bản chất và Tính chất quan trọng của YAML](#1-bản-chất-và-tính-chất-quan-trọng-của-yaml)
+  - [Các đặc trưng quan trọng của YAML](#các-đặc-trưng-quan-trọng-của-yaml)
+- [2. Giải nghĩa các từ khóa CI/CD phổ biến (GitHub Actions)](#2-giải-nghĩa-các-từ-khóa-cicd-phổ-biến-github-actions)
+  - [`name`](#name)
+  - [`on`](#on)
+  - [`jobs`](#jobs)
+  - [`steps`](#steps)
+  - [`run`](#run)
+  - [`uses`](#uses)
+  - [`with`](#with)
+  - [`env`](#env)
+  - [`needs`](#needs)
+- [3. Bản đồ đối chiếu sang GitLab CI/CD](#3-bản-đồ-đối-chiếu-sang-gitlab-cicd)
+- [4. Tài liệu chính thức (Official Documentation Docs)](#4-tài-liệu-chính-thức-official-documentation-docs)
+- [5. Q&A (Câu hỏi thường gặp)](#5-qa-câu-hỏi-thường-gặp)
+
+---
+
 ## 1. Bản chất và Tính chất quan trọng của YAML
 **YAML** (viết tắt của *YAML Ain't Markup Language*) là một ngôn ngữ mã hóa dữ liệu dưới dạng văn bản (data serialization language), thường được dùng để cấu hình hệ thống, workflow, hoặc docker-compose.
 
-### Các đặc trưng quan trọng của YAML:
+### Các đặc trưng quan trọng của YAML
 *   **Thụt lề bằng khoảng trắng (Indentation):** YAML sử dụng khoảng trắng (spaces) để phân cấp cấu trúc (cha-con).
     *   ⚠️ **Bắt buộc:** Phải dùng dấu cách (spaces), **không được dùng phím Tab**.
     *   Thông thường người ta dùng **2 khoảng trắng** cho mỗi cấp bậc thụt lề.
@@ -30,7 +50,7 @@ Các từ khóa bạn đề cập như `name`, `on`, `jobs`, `steps`, `run`, `us
 
 Dưới đây là chi tiết từng từ khóa:
 
-### 🔑 `name`
+### `name`
 *   **Ý nghĩa:** Tên của workflow, job, hoặc step.
 *   **Mục đích:** Giúp hiển thị trực quan trên giao diện web của GitHub để dễ theo dõi quá trình chạy.
 *   **Ví dụ:**
@@ -38,7 +58,7 @@ Dưới đây là chi tiết từng từ khóa:
     name: Docker Build and Push
     ```
 
-### 🔑 `on`
+### `on`
 *   **Ý nghĩa:** Định nghĩa các sự kiện (trigger events) kích hoạt workflow tự động chạy.
 *   **Ví dụ:** Chạy khi có code push lên nhánh `main`, hoặc khi tạo pull request, hoặc cho phép chạy thủ công (`workflow_dispatch`).
     ```yaml
@@ -48,7 +68,7 @@ Dưới đây là chi tiết từng từ khóa:
       workflow_dispatch: # Cho phép nhấn nút chạy thủ công trên web
     ```
 
-### 🔑 `jobs`
+### `jobs`
 *   **Ý nghĩa:** Nhóm các công việc (job) cần thực hiện trong workflow. Các job mặc định sẽ **chạy song song** với nhau (trừ khi được cấu hình phụ thuộc qua `needs`).
 *   **Ví dụ:**
     ```yaml
@@ -63,7 +83,7 @@ Dưới đây là chi tiết từng từ khóa:
           # các bước...
     ```
 
-### 🔑 `steps`
+### `steps`
 *   **Ý nghĩa:** Danh sách các bước tuần tự sẽ được thực thi bên trong một job cụ thể.
 *   **Ví dụ:** Mỗi step có thể chạy lệnh terminal hoặc gọi một Action có sẵn.
     ```yaml
@@ -74,7 +94,7 @@ Dưới đây là chi tiết từng từ khóa:
         run: npm install
     ```
 
-### 🔑 `run`
+### `run`
 *   **Ý nghĩa:** Chạy các câu lệnh terminal (shell command) trên runner máy ảo.
 *   **Ví dụ:** Chạy một hoặc nhiều lệnh shell.
     ```yaml
@@ -84,7 +104,7 @@ Dưới đây là chi tiết từng từ khóa:
         npm run test
     ```
 
-### 🔑 `uses`
+### `uses`
 *   **Ý nghĩa:** Gọi và sử dụng một Action đã được viết sẵn (từ GitHub Marketplace hoặc thư mục local).
 *   **Ví dụ:** Sử dụng action checkout code hoặc login vào Docker Registry.
     ```yaml
@@ -92,7 +112,7 @@ Dưới đây là chi tiết từng từ khóa:
       uses: docker/login-action@v3
     ```
 
-### 🔑 `with`
+### `with`
 *   **Ý nghĩa:** Cung cấp các tham số đầu vào (inputs) cho Action được gọi ở phần `uses`.
 *   **Ví dụ:** Truyền username và password khi login Docker.
     ```yaml
@@ -103,7 +123,7 @@ Dưới đây là chi tiết từng từ khóa:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     ```
 
-### 🔑 `env`
+### `env`
 *   **Ý nghĩa:** Khai báo các biến môi trường (environment variables) cho workflow, job, hoặc step cụ thể.
 *   **Ví dụ:**
     ```yaml
@@ -112,7 +132,7 @@ Dưới đây là chi tiết từng từ khóa:
       PORT: 3000
     ```
 
-### 🔑 `needs`
+### `needs`
 *   **Ý nghĩa:** Tạo sự phụ thuộc giữa các job. Job hiện tại chỉ bắt đầu chạy khi các job được liệt kê trong `needs` đã chạy thành công.
 *   **Ví dụ:** Job `deploy` chỉ chạy sau khi job `build` và job `test` hoàn thành.
     ```yaml
@@ -147,15 +167,15 @@ Nếu dự án của bạn chuyển sang sử dụng **GitLab CI/CD** (cấu hì
 ## 4. Tài liệu chính thức (Official Documentation Docs)
 Để học sâu hơn và tự tra cứu khi cần, bạn có thể truy cập các liên kết tài liệu chính thức sau:
 
-### 📘 Tài liệu chính thức của GitHub Actions:
+### Tài liệu chính thức của GitHub Actions
 *   [GitHub Actions Syntax Reference](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions): Tài liệu chi tiết nhất về tất cả các từ khóa (`on`, `jobs`, `steps`, `env`, `needs`,...).
 *   [Understanding GitHub Actions](https://docs.github.com/en/actions/about-github-actions/understanding-github-actions): Khái niệm cơ bản, cách hoạt động của workflow, runner, job, step.
 
-### 🦊 Tài liệu chính thức của GitLab CI/CD:
+### Tài liệu chính thức của GitLab CI/CD
 *   [GitLab CI/CD YAML syntax reference](https://docs.gitlab.com/ee/ci/yaml/index.html): Hướng dẫn chi tiết tất cả các từ khóa trong file `.gitlab-ci.yml` (như `script`, `stage`, `needs`, `rules`, `image`, `variables`,...).
 *   [GitLab CI/CD Tutorial for Beginners](https://docs.gitlab.com/ee/ci/quick_start/): Hướng dẫn nhanh bắt đầu viết file CI/CD đầu tiên trên GitLab.
 
-### 📝 Tài liệu & Công cụ về YAML:
+### Tài liệu & Công cụ về YAML
 *   [YAML Official Specification](https://yaml.org/spec): Trang chủ đặc tả kỹ thuật của YAML.
 *   [Learn YAML in Y Minutes](https://learnxinyminutes.com/docs/yaml/): Hướng dẫn nhanh cú pháp YAML qua ví dụ trực quan trong 5 phút.
 *   [YAML Lint](http://www.yamllint.com/): Công cụ kiểm tra cú pháp file YAML online để xem có bị lỗi thụt dòng hay định dạng không.

@@ -1,4 +1,4 @@
-# ☸️ Hướng Dẫn Học Kubernetes (K8s) - Kiến Trúc & Các Đối Tượng Vận Hành
+# Hướng Dẫn Học Kubernetes (K8s) - Kiến Trúc & Các Đối Tượng Vận Hành
 
 Tài liệu này cung cấp cái nhìn toàn diện về **Kubernetes (K8s)** dựa trên nội dung thực hành **"DevOps from Zero to Hero: Build and Deploy a Production API"** và bài giảng chuyên sâu **"DevOps Master Class - Part 7 - Containers & Friends"**. Tài liệu đi sâu phân tích kiến trúc, các thành phần cốt lõi và các cơ chế vận hành thực tế trong dự án.
 
@@ -6,24 +6,31 @@ Tài liệu này cung cấp cái nhìn toàn diện về **Kubernetes (K8s)** d�
 
 ## 📌 Mục Lục (Table of Contents)
 
-1. [1. Tư Duy Quản Lý: "Đàn Gia Súc" (Cattle) vs "Thú Cưng" (Pets)](#1-tư-duy-quản-lý-đàn-gia-súc-cattle-vs-thú-cưng-pets)
-2. [2. Phân Tích Kiến Trúc Kubernetes (Kubernetes Architecture)](#2-phân-tích-kiến-trúc-kubernetes-kubernetes-architecture)
-    * [2.1. Sơ đồ mô phỏng Cluster](#21-sơ-đồ-mô-phỏng-cluster)
-    * [2.2. Thành phần Control Plane (Master Node)](#22-thành-phần-control-plane-master-node)
-    * [2.3. Thành phần Worker Nodes](#23-thành-phần-worker-nodes)
-3. [3. Pod & Vòng Đời - Có Phải Mỗi Pod Chỉ Chứa Một Container?](#3-pod--vòng-đời---có-phải-mỗi-pod-chỉ-chứa-một-container)
-    * [3.1. Single-container Pod (Mô hình tiêu chuẩn)](#31-single-container-pod-mô-hình-tiêu-chuẩn)
-    * [3.2. Multi-container Pod (Mô hình đa container)](#32-multi-container-pod-mô-hình-đa-container)
-    * [3.3. Init Containers (Container Khởi Tạo)](#33-init-containers-container-khởi-tạo)
-4. [4. Cơ Chế Tự Phục Hồi: Khái Niệm Replicas & Vai Trò Của ReplicaSet](#4-cơ-chế-tự-phục-hồi-khái-niệm-replicas--vai-trò-của-replicaset)
-5. [5. Service: Giải Quyết Vấn Đề IP Biến Động Của Pods](#5-service-giải-quyết-vấn-đề-ip-biến-động-của-pods)
-6. [6. Ingress: Cổng Vào HTTP/HTTPS Cho Toàn Bộ Cluster](#6-ingress-cổng-vào-httphttps-cho-toàn-bộ-cluster)
-7. [7. ConfigMaps & Secrets: Quản Lý Cấu Hình & Bảo Mật Động](#7-configmaps--secrets-quản-lý-cấu-hình--bảo-mật-động)
-8. [8. So Sánh Các Công Cụ K8s Local: Minikube vs Kind vs K3s](#8-so-sánh-các-công-cụ-k8s-local-minikube-vs-kind-vs-k3s)
+- [1. Tư Duy Quản Lý: "Đàn Gia Súc" (Cattle) vs "Thú Cưng" (Pets)](#1-tư-duy-quản-lý-đàn-gia-súc-cattle-vs-thú-cưng-pets)
+- [2. Phân Tích Kiến Trúc Kubernetes (Kubernetes Architecture)](#2-phân-tích-kiến-trúc-kubernetes-kubernetes-architecture)
+  - [2.1. Sơ đồ mô phỏng Cluster](#21-sơ-đồ-mô-phỏng-cluster)
+  - [2.2. Thành phần Control Plane (Master Node)](#22-thành-phần-control-plane-master-node)
+  - [2.3. Thành phần Worker Nodes](#23-thành-phần-worker-nodes)
+- [3. Pod & Vòng Đời - Có Phải Mỗi Pod Chỉ Chứa Một Container?](#3-pod-vòng-đời---có-phải-mỗi-pod-chỉ-chứa-một-container)
+  - [3.1. Single-container Pod (Mô hình tiêu chuẩn)](#31-single-container-pod-mô-hình-tiêu-chuẩn)
+  - [3.2. Multi-container Pod (Mô hình đa container)](#32-multi-container-pod-mô-hình-đa-container)
+  - [3.3. Init Containers (Container Khởi Tạo)](#33-init-containers-container-khởi-tạo)
+- [4. Cơ Chế Tự Phục Hồi: Khái Niệm Replicas & Vai Trò Của ReplicaSet](#4-cơ-chế-tự-phục-hồi-khái-niệm-replicas-vai-trò-của-replicaset)
+  - [4.1. Replicas (Bản sao) là gì trong Kubernetes?](#41-replicas-bản-sao-là-gì-trong-kubernetes)
+  - [4.2. Điều gì xảy ra khi chưa có ReplicaSet (Bare Pod / Static Pod)?](#42-điều-gì-xảy-ra-khi-chưa-có-replicaset-bare-pod-static-pod)
+  - [4.3. Khi có ReplicaSet](#43-khi-có-replicaset)
+- [5. Service: Giải Quyết Vấn Đề IP Biến Động Của Pods](#5-service-giải-quyết-vấn-đề-ip-biến-động-của-pods)
+- [6. Ingress: Cổng Vào HTTP/HTTPS Cho Toàn Bộ Cluster](#6-ingress-cổng-vào-httphttps-cho-toàn-bộ-cluster)
+- [7. ConfigMaps & Secrets: Quản Lý Cấu Hình & Bảo Mật Động](#7-configmaps-secrets-quản-lý-cấu-hình-bảo-mật-động)
+  - [7.1. Cách chèn cấu hình vào Pod (Injection Methods)](#71-cách-chèn-cấu-hình-vào-pod-injection-methods)
+  - [7.2. Sự khác biệt cốt lõi giữa ConfigMap và Secret](#72-sự-khác-biệt-cốt-lõi-giữa-configmap-và-secret)
+- [8. So Sánh Các Công Cụ K8s Local: Minikube vs Kind vs K3s](#8-so-sánh-các-công-cụ-k8s-local-minikube-vs-kind-vs-k3s)
+  - [8.1. Phân Tích Chi Tiết](#81-phân-tích-chi-tiết)
+  - [8.2. Bảng So Sánh & Đề Xuất Lựa Chọn Theo Giai Đoạn](#82-bảng-so-sánh-đề-xuất-lựa-chọn-theo-giai-đoạn)
 
 ---
 
-## 🤠 1. Tư Duy Quản Lý: "Đàn Gia Súc" (Cattle) vs "Thú Cưng" (Pets)
+## 1. Tư Duy Quản Lý: "Đàn Gia Súc" (Cattle) vs "Thú Cưng" (Pets)
 
 Để hiểu được triết lý thiết kế của Kubernetes, trước tiên ta cần nắm vững sự khác biệt giữa hai mô hình quản lý máy chủ:
 
@@ -40,7 +47,7 @@ Tài liệu này cung cấp cái nhìn toàn diện về **Kubernetes (K8s)** d�
 
 ---
 
-## 🏗️ 2. Phân Tích Kiến Trúc Kubernetes (Kubernetes Architecture)
+## 2. Phân Tích Kiến Trúc Kubernetes (Kubernetes Architecture)
 
 Dưới đây là phần giải thích chi tiết cho sơ đồ vận hành của một **Kubernetes Cluster**:
 
@@ -131,7 +138,7 @@ graph TD
 
 ---
 
-## 📦 3. Pod & Vòng Đời - Có Phải Mỗi Pod Chỉ Chứa Một Container?
+## 3. Pod & Vòng Đời - Có Phải Mỗi Pod Chỉ Chứa Một Container?
 
 Một câu hỏi rất phổ biến khi tiếp cận Kubernetes là: **Mỗi Pod có phải chỉ chứa duy nhất một container hay không?**
 
@@ -177,7 +184,7 @@ Mẫu thiết kế multi-container phổ biến nhất là **Sidecar Pattern**:
 
 ---
 
-## 🔄 4. Cơ Chế Tự Phục Hồi: Khái Niệm Replicas & Vai Trò Của ReplicaSet
+## 4. Cơ Chế Tự Phục Hồi: Khái Niệm Replicas & Vai Trò Của ReplicaSet
 
 Để hiểu cách Kubernetes vận hành ổn định trên môi trường sản xuất (production), chúng ta cần nắm rõ khái niệm **Replicas** (bản sao) và tại sao các bộ điều phối (Controllers) như **ReplicaSet** hay **Deployment** lại vô cùng quan trọng.
 
@@ -185,12 +192,12 @@ Mẫu thiết kế multi-container phổ biến nhất là **Sidecar Pattern**:
 
 Trong Kubernetes, **Replicas** là các bản sao giống hệt nhau của cùng một Pod, chạy đồng thời để phục vụ cho cùng một ứng dụng/dịch vụ.
 
-#### 💡 Tại sao cần chạy nhiều Replicas?
+#### Tại sao cần chạy nhiều Replicas?
 *   **Tăng tính sẵn sàng cao (High Availability):** Nếu một Pod hoặc một Worker Node bị sập (do lỗi phần cứng, mất kết nối mạng, tràn bộ nhớ), các Pod bản sao chạy trên các Node khác vẫn hoạt động để phục vụ người dùng mà không gây gián đoạn dịch vụ.
 *   **Cân bằng tải (Load Balancing):** K8s Service sẽ tự động chia đều lưu lượng truy cập (traffic) của người dùng đến tất cả các Pod bản sao này, giúp hệ thống chịu tải tốt hơn và giảm nguy cơ sập do quá tải một máy chủ đơn lẻ.
 *   **Cập nhật không gián đoạn (Zero-Downtime Deployment):** Khi bạn deploy phiên bản mới, K8s sẽ cập nhật dần dần từng bản sao một (Rolling Update) để tại bất kỳ thời điểm nào cũng luôn có bản sao sẵn sàng chạy.
 
-#### ⚙️ Cơ chế duy trì số lượng Replicas (Desired State vs. Actual State)
+#### Cơ chế duy trì số lượng Replicas (Desired State vs. Actual State)
 Kubernetes hoạt động dựa trên cơ chế liên tục so sánh và điều hòa trạng thái:
 *   **Desired State (Trạng thái mong muốn):** Số lượng bản sao bạn khai báo trong file YAML (ví dụ: `replicas: 2` hoặc `replicas: 3` trong Deployment).
 *   **Actual State (Trạng thái thực tế):** Số lượng Pod thực tế đang sống và chạy trong cụm (cluster).
@@ -236,7 +243,7 @@ Hãy hình dung kịch bản khi ta **chỉ triển khai các Pod đơn lẻ tr�
 
 ---
 
-## 🌐 5. Service: Giải Quyết Vấn Đề IP Biến Động Của Pods
+## 5. Service: Giải Quyết Vấn Đề IP Biến Động Của Pods
 
 Như đã phân tích ở trên, Pod là "đàn gia súc" - chúng có thể bị khai tử và tạo mới bất cứ lúc nào. Mỗi lần tái sinh, Pod sẽ nhận được một **địa chỉ IP nội bộ hoàn toàn mới**.
 
@@ -275,7 +282,7 @@ Nếu ứng dụng Frontend cần gọi ứng dụng API (Backend) và bạn c�
 
 ---
 
-## 🚦 6. Ingress: Cổng Vào HTTP/HTTPS Cho Toàn Bộ Cluster
+## 6. Ingress: Cổng Vào HTTP/HTTPS Cho Toàn Bộ Cluster
 
 Mặc dù `Service` giải quyết tốt bài toán kết nối trong nội bộ cụm K8s, nhưng việc đưa ứng dụng ra môi trường Internet (External Access) sẽ gặp hạn chế nếu chỉ dùng Service:
 *   Nếu dùng Service loại `NodePort`: Cổng kết nối bị giới hạn trong khoảng `30000 - 32767` (thiếu chuyên nghiệp, ví dụ: `example.com:31254`).
@@ -318,7 +325,7 @@ Mặc dù `Service` giải quyết tốt bài toán kết nối trong nội bộ
 
 ---
 
-## ⚙️ 7. ConfigMaps & Secrets: Quản Lý Cấu Hình & Bảo Mật Động
+## 7. ConfigMaps & Secrets: Quản Lý Cấu Hình & Bảo Mật Động
 
 Để đảm bảo nguyên tắc Docker Image chỉ cần build 1 lần và có thể chạy ở mọi nơi (Build Once, Run Anywhere), ta phải tách toàn bộ cấu hình môi trường ra khỏi mã nguồn của container. K8s hỗ trợ việc này thông qua **ConfigMaps** và **Secrets**.
 
@@ -345,7 +352,7 @@ K8s cung cấp hai phương thức phổ biến để đưa ConfigMap và Secret
 
 ---
 
-## 🛠️ 8. So Sánh Các Công Cụ K8s Local: Minikube vs Kind vs K3s
+## 8. So Sánh Các Công Cụ K8s Local: Minikube vs Kind vs K3s
 
 Khi học tập hoặc phát triển ứng dụng K8s tại local (máy cá nhân), ta không thể thuê các cụm cloud lớn đắt đỏ. Dưới đây là 3 công cụ K8s gọn nhẹ phổ biến nhất, đáp ứng các mục tiêu khác nhau:
 

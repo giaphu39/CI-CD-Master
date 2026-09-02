@@ -4,6 +4,24 @@ Tài liệu này cung cấp cái nhìn tổng quan về PowerShell, lý do tại
 
 ---
 
+## 📌 Mục Lục (Table of Contents)
+
+- [1. PowerShell Là Gì?](#1-powershell-là-gì)
+- [2. Tại Sao Nên Dùng PowerShell Thay Thế Bash Trên Windows?](#2-tại-sao-nên-dùng-powershell-thay-thế-bash-trên-windows)
+- [3. Các Lệnh Cơ Bản Cần Biết (Basic Cmdlets)](#3-các-lệnh-cơ-bản-cần-biết-basic-cmdlets)
+  - [Lệnh Điều Hướng & Quản Lý Hệ Thống](#lệnh-điều-hướng-quản-lý-hệ-thống)
+  - [Lệnh Tra Cứu & Trợ Giúp](#lệnh-tra-cứu-trợ-giúp)
+  - [Quản Lý Bảo Mật & Chạy Script](#quản-lý-bảo-mật-chạy-script)
+- [4. Ngôn Ngữ Scripting: Từ Cơ Bản Đến Nâng Cao](#4-ngôn-ngữ-scripting-từ-cơ-bản-đến-nâng-cao)
+  - [4.1. Khai Báo Biến (Variables)](#41-khai-báo-biến-variables)
+  - [4.2. Các Toán Tử So Sánh (Comparison Operators)](#42-các-toán-tử-so-sánh-comparison-operators)
+  - [4.3. Pipeline & Lọc Dữ Liệu](#43-pipeline-lọc-dữ-liệu)
+  - [4.4. Vòng Lặp (Loops)](#44-vòng-lặp-loops)
+  - [4.5. Xử Lý Lỗi (Error Handling)](#45-xử-lý-lỗi-error-handling)
+  - [4.6. Xuất Dữ Liệu Đồng Bộ (Out-Host)](#46-xuất-dữ-liệu-đồng-bộ-out-host)
+
+---
+
 ## 1. PowerShell Là Gì?
 
 **PowerShell** là một giải pháp tự động hóa tác vụ và quản lý cấu hình được phát triển bởi Microsoft. Nó bao gồm một shell dòng lệnh (command-line shell), một ngôn ngữ kịch bản (scripting language) và một framework quản lý cấu hình.
@@ -69,7 +87,7 @@ Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process
 
 ## 4. Ngôn Ngữ Scripting: Từ Cơ Bản Đến Nâng Cao
 
-### 4.1 Khai Báo Biến (Variables)
+### 4.1. Khai Báo Biến (Variables)
 Tất cả các biến trong PowerShell đều bắt đầu bằng ký tự `$`.
 ```powershell
 $Username = "amalkin39"
@@ -78,7 +96,7 @@ $Project = "3_1_kubernetes-demo-api"
 $ImageName = "${Username}/${Project}:latest" 
 ```
 
-### 4.2 Các Toán Tử So Sánh (Comparison Operators)
+### 4.2. Các Toán Tử So Sánh (Comparison Operators)
 PowerShell không dùng các ký hiệu như `==`, `!=`, `<`, `>` để so sánh mà dùng các toán tử ký tự:
 * `-eq` (Equal): Bằng
 * `-ne` (Not Equal): Không bằng
@@ -94,7 +112,7 @@ if ($Age -ge 18) {
 }
 ```
 
-### 4.3 Pipeline & Lọc Dữ Liệu (`|`)
+### 4.3. Pipeline & Lọc Dữ Liệu
 Nhờ cơ chế Object, việc dùng pipeline trong PowerShell cực kỳ mạnh mẽ:
 * **`Where-Object` (alias: `?`):** Lọc các phần tử thỏa mãn điều kiện.
   ```powershell
@@ -107,7 +125,7 @@ Nhờ cơ chế Object, việc dùng pipeline trong PowerShell cực kỳ mạnh
   Get-Process -Name chrome | Select-Object -Property ProcessName, Id
   ```
 
-### 4.4 Vòng Lặp (Loops)
+### 4.4. Vòng Lặp (Loops)
 ```powershell
 # Cách 1: Vòng lặp foreach truyền thống
 $Names = @("Pod1", "Pod2", "Pod3")
@@ -121,7 +139,7 @@ $Names | ForEach-Object {
 }
 ```
 
-### 4.5 Xử Lý Lỗi (Error Handling)
+### 4.5. Xử Lý Lỗi (Error Handling)
 Để viết script DevOps tin cậy, bạn cần kiểm soát được lỗi xảy ra:
 
 * **`$ErrorActionPreference = "Stop"`:**
@@ -141,9 +159,10 @@ $Names | ForEach-Object {
   }
   ```
 
-### 4.6 Xuất Dữ Liệu Đồng Bộ (`Out-Host`)
+### 4.6. Xuất Dữ Liệu Đồng Bộ (Out-Host)
 Trong PowerShell, đầu ra của tiến trình bên ngoài (như `docker`, `kubectl`) đi qua một luồng pipeline định dạng. Để tránh hiện tượng các dòng thông tin bị hiển thị lệch thứ tự hoặc đè lên nhau, chúng ta sử dụng `Out-Host` để bắt buộc dữ liệu in ra màn hình ngay lập tức:
 ```powershell
 # Chạy đồng bộ và in kết quả ra màn hình console ngay lập tức
 kubectl get pods | Out-Host
 ```
+

@@ -6,33 +6,33 @@ Tài liệu này hệ thống hóa toàn bộ kiến thức về **Docker** từ
 
 ## 📌 Mục Lục (Table of Contents)
 
-1. [1. Ẩn Dụ: Hộp Cơm Trưa Ma Thuật (Lunchbox Metaphor)](#1-ẩn-dụ-hộp-cơm-trưa-ma-thuật-lunchbox-metaphor)
-2. [2. Đặc Tính và Lợi Ích Cốt Lõi của Docker](#2-đặc-tính-và-lợi-ích-cốt-lõi-của-docker)
-3. [3. So Sánh Chi Tiết: Docker Container vs. Virtual Machine (VM)](#3-so-sánh-chi-tiết-docker-container-vs-virtual-machine-vm)
-    * [Sơ đồ Kiến trúc Hệ thống](#sơ-đồ-kiến-trúc-hệ-thống)
-    * [Bảng so sánh kỹ thuật chi tiết](#bảng-so-sánh-kỹ-thuật-chi-tiết)
-4. [4. Các Khái Niệm Cấu Thành Bên Trong Docker](#4-các-khái-niệm-cấu-thành-bên-trong-docker)
-5. [5. Các Thực Hành Nâng Cao & Công Cụ Bổ Trợ (Best Practices)](#5-các-thực-hành-nâng-cao--công-cụ-bổ-trợ-best-practices)
-    * [5.1. Cơ chế lưu bộ nhớ đệm (Dependency Caching Layer)](#51-cơ-chế-lưu-bộ-nhớ-đệm-dependency-caching-layer)
-    * [5.2. Bảo mật phi Root (Non-root User)](#52-bảo-mật-phi-root-non-root-user)
-    * [5.3. Đóng gói đa giai đoạn (Multi-stage Build)](#53-đóng-gói-đa-giai-đoạn-multi-stage-build)
-    * [5.4. Docker Compose & Docker Init](#54-docker-compose--docker-init)
-    * [5.5. Neon Local (Môi trường DB cục bộ tạm thời)](#55-neon-local-môi-trường-db-cục-bộ-tạm-thời)
-6. [6. Kiến Trúc 3 Thành Phần Cốt Lõi (Docker Architecture)](#6-kiến-trúc-3-thành-phần-cốt-lõi-docker-architecture)
-    * [6.1. Chi tiết các thành phần:](#61-chi-tiết-các-thành-phần)
-    * [Mở rộng: "Daemon" là gì?](#mở-rộng-daemon-là-gì-có-giống-daemon-tools-hồi-xưa-hay-dùng)
-    * [Luồng hoạt động phối hợp:](#luồng-hoạt-động-phối-hợp)
-7. [7. Ba Quy Trình Làm Việc (Workflows) Với Docker](#7-ba-quy-trình-làm-việc-workflows-với-docker)
-    * [7.1. Quy trình làm việc thủ công (Manual Workflow)](#71-quy-trình-làm-việc-thủ-công-manual-workflow)
-    * [7.2. Quy trình tự động hóa cục bộ (Docker Compose & Neon Local)](#72-quy-trình-tự-động-hóa-cục-bộ-docker-compose--neon-local)
-    * [7.3. Quy trình tự động hóa hoàn toàn trong CI/CD (GitHub Actions)](#73-quy-trình-tự-động-hóa-hoàn-toàn-trong-cicd-github-actions)
-8. [8. Kiến Thức Mở Rộng: Docker Hoạt Động Dưới Hạ Tầng Như Thế Nào?](#8-kiến-thức-mở-rộng-docker-hoạt-động-dưới-hạ-tầng-như-thế-nào)
-    * [8.1. Namespaces và cgroups (Control Groups)](#81-namespaces-và-cgroups-control-groups)
-    * [8.2. Cơ chế lưu trữ Layered File System (UnionFS)](#82-cơ-chế-lưu-trữ-layered-file-system-unionfs)
+- [1. Ẩn Dụ: Hộp Cơm Trưa Ma Thuật (Lunchbox Metaphor)](#1-ẩn-dụ-hộp-cơm-trưa-ma-thuật-lunchbox-metaphor)
+- [2. Đặc Tính và Lợi Ích Cốt Lõi của Docker](#2-đặc-tính-và-lợi-ích-cốt-lõi-của-docker)
+- [3. So Sánh Chi Tiết: Docker Container vs. Virtual Machine (VM)](#3-so-sánh-chi-tiết-docker-container-vs-virtual-machine-vm)
+  - [Sơ đồ Kiến trúc Hệ thống](#sơ-đồ-kiến-trúc-hệ-thống)
+  - [Bảng so sánh kỹ thuật chi tiết](#bảng-so-sánh-kỹ-thuật-chi-tiết)
+- [4. Các Khái Niệm Cấu Thành Bên Trong Docker](#4-các-khái-niệm-cấu-thành-bên-trong-docker)
+- [5. Các Thực Hành Nâng Cao & Công Cụ Bổ Trợ (Best Practices)](#5-các-thực-hành-nâng-cao-công-cụ-bổ-trợ-best-practices)
+  - [5.1. Cơ chế lưu bộ nhớ đệm (Dependency Caching Layer)](#51-cơ-chế-lưu-bộ-nhớ-đệm-dependency-caching-layer)
+  - [5.2. Bảo mật phi Root (Non-root User)](#52-bảo-mật-phi-root-non-root-user)
+  - [5.3. Đóng gói đa giai đoạn (Multi-stage Build)](#53-đóng-gói-đa-giai-đoạn-multi-stage-build)
+  - [5.4. Docker Compose & Docker Init](#54-docker-compose-docker-init)
+  - [5.5. Neon Local (Môi trường DB cục bộ tạm thời)](#55-neon-local-môi-trường-db-cục-bộ-tạm-thời)
+- [6. Kiến Trúc 3 Thành Phần Cốt Lõi (Docker Architecture)](#6-kiến-trúc-3-thành-phần-cốt-lõi-docker-architecture)
+  - [6.1. Chi tiết các thành phần](#61-chi-tiết-các-thành-phần)
+  - [Mở rộng: "Daemon" là gì? Có giống "DAEMON Tools" hồi xưa hay dùng?](#mở-rộng-daemon-là-gì-có-giống-daemon-tools-hồi-xưa-hay-dùng)
+  - [Luồng hoạt động phối hợp](#luồng-hoạt-động-phối-hợp)
+- [7. Ba Quy Trình Làm Việc (Workflows) Với Docker](#7-ba-quy-trình-làm-việc-workflows-với-docker)
+  - [7.1. Quy trình làm việc thủ công (Manual Workflow)](#71-quy-trình-làm-việc-thủ-công-manual-workflow)
+  - [7.2. Quy trình tự động hóa cục bộ (Docker Compose & Neon Local)](#72-quy-trình-tự-động-hóa-cục-bộ-docker-compose-neon-local)
+  - [7.3. Quy trình tự động hóa hoàn toàn trong CI/CD (GitHub Actions)](#73-quy-trình-tự-động-hóa-hoàn-toàn-trong-cicd-github-actions)
+- [8. Kiến Thức Mở Rộng: Docker Hoạt Động Dưới Hạ Tầng Như Thế Nào?](#8-kiến-thức-mở-rộng-docker-hoạt-động-dưới-hạ-tầng-như-thế-nào)
+  - [8.1. Namespaces và cgroups (Control Groups)](#81-namespaces-và-cgroups-control-groups)
+  - [8.2. Cơ chế lưu trữ Layered File System (UnionFS)](#82-cơ-chế-lưu-trữ-layered-file-system-unionfs)
 
 ---
 
-## 🍱 1. Ẩn Dụ: Hộp Cơm Trưa Ma Thuật (Lunchbox Metaphor)
+## 1. Ẩn Dụ: Hộp Cơm Trưa Ma Thuật (Lunchbox Metaphor)
 
 Hãy tưởng tượng bạn chuẩn bị một hộp cơm trưa mang đi làm. 
 *   Nếu bạn chỉ mang **món ăn chính** (mã nguồn ứng dụng - Code), khi đến công ty bạn có thể thiếu thìa, thiếu bát, nước sốt không đúng vị, hoặc lò vi sóng ở công ty không tương thích để hâm nóng. Kết quả: Món ăn không ngon hoặc không thể ăn được.
@@ -45,7 +45,7 @@ Nhờ hộp cơm ma thuật này, dù bạn ăn ở văn phòng, ở công viên
 
 ---
 
-## 🚀 2. Đặc Tính và Lợi Ích Cốt Lõi của Docker
+## 2. Đặc Tính và Lợi Ích Cốt Lõi của Docker
 
 | Đặc tính | Ý nghĩa thực tế | Lợi ích DevOps |
 | :--- | :--- | :--- |
@@ -59,11 +59,11 @@ Nhờ hộp cơm ma thuật này, dù bạn ăn ở văn phòng, ở công viên
 
 ---
 
-## 🎨 3. So Sánh Chi Tiết: Docker Container vs. Virtual Machine (VM)
+## 3. So Sánh Chi Tiết: Docker Container vs. Virtual Machine (VM)
 
 Để hiểu tại sao Docker lại nhẹ và hiệu quả hơn Máy ảo (Virtual Machines), hãy cùng xem sơ đồ so sánh kiến trúc dưới đây:
 
-### 📐 Sơ đồ Kiến trúc Hệ thống
+### Sơ đồ Kiến trúc Hệ thống
 
 ```mermaid
 graph TD
@@ -110,7 +110,7 @@ graph TD
     end
 ```
 
-### 📊 Bảng so sánh kỹ thuật chi tiết
+### Bảng so sánh kỹ thuật chi tiết
 
 | Tiêu chí | Máy ảo (Virtual Machines) | Docker Container |
 | :--- | :--- | :--- |
@@ -123,7 +123,7 @@ graph TD
 
 ---
 
-## 🧱 4. Các Khái Niệm Cấu Thành Bên Trong Docker
+## 4. Các Khái Niệm Cấu Thành Bên Trong Docker
 
 Mối quan hệ giữa các thành phần cốt lõi của Docker được mô tả qua vòng đời dưới đây:
 
@@ -157,9 +157,9 @@ graph LR
 
 ---
 
-## 🛠️ 5. Các Thực Hành Nâng Cao & Công Cụ Bổ Trợ (Best Practices)
+## 5. Các Thực Hành Nâng Cao & Công Cụ Bổ Trợ (Best Practices)
 
-### ⚡ 5.1. Cơ chế lưu bộ nhớ đệm (Dependency Caching Layer)
+### 5.1. Cơ chế lưu bộ nhớ đệm (Dependency Caching Layer)
 Trong một dự án Node.js, thư mục `node_modules` thường rất nặng và ít khi thay đổi so với mã nguồn (source code). Nếu viết Dockerfile như thế này:
 ```dockerfile
 # ❌ THỰC HÀNH XẤU (Không tối ưu)
@@ -178,7 +178,7 @@ RUN npm install
 COPY . .
 ```
 
-### 🔒 5.2. Bảo mật phi Root (Non-root User)
+### 5.2. Bảo mật phi Root (Non-root User)
 Mặc định, Docker chạy các tiến trình bên trong container với quyền `root`. Nếu hacker khai thác được lỗ hổng bảo mật trong ứng dụng Node.js của bạn, chúng có thể thoát khỏi container (container breakout) và chiếm toàn quyền kiểm soát máy chủ vật lý.
 
 **✅ Giải pháp tối ưu:**
@@ -190,7 +190,7 @@ USER appuser
 CMD ["node", "src/index.js"]
 ```
 
-### 📦 5.3. Đóng gói đa giai đoạn (Multi-stage Build)
+### 5.3. Đóng gói đa giai đoạn (Multi-stage Build)
 Khi xây dựng các ứng dụng React, NestJS, TypeScript, v.v., chúng ta cần rất nhiều công cụ cồng kềnh (devDependencies, compilers) để build ứng dụng. Nhưng khi chạy trên production, ta chỉ cần file JS đã build xong và runtime gọn nhẹ.
 
 Multi-stage build cho phép chia Dockerfile làm nhiều giai đoạn:
@@ -216,7 +216,7 @@ CMD ["node", "dist/main.js"]
 > [!TIP]
 > Sử dụng Multi-stage build giúp giảm kích thước Docker Image từ **1GB+** xuống còn khoảng **100MB**, giúp tiết kiệm băng thông và tăng tốc độ deploy đáng kể.
 
-### 🎼 5.4. Docker Compose & Docker Init
+### 5.4. Docker Compose & Docker Init
 *   **Docker Init:** Chỉ cần gõ lệnh `docker init` trong thư mục dự án, Docker sẽ tự động quét ngôn ngữ lập trình và sinh ra các file cấu hình chuẩn chỉnh (`Dockerfile`, `.dockerignore`, `compose.yaml`) tối ưu nhất cho bạn.
 *   **Docker Compose (`compose.yaml`):** Thay vì gõ những dòng lệnh khởi chạy container dài ngoằng với nhiều cấu hình cổng, mạng, volume phức tạp:
     ```bash
@@ -231,13 +231,13 @@ CMD ["node", "dist/main.js"]
     docker compose down
     ```
 
-### 🧪 5.5. Neon Local (Môi trường DB cục bộ tạm thời)
+### 5.5. Neon Local (Môi trường DB cục bộ tạm thời)
 *   **Neon** là dịch vụ Serverless Postgres nổi tiếng trên Cloud. Tuy nhiên, khi phát triển hoặc chạy kiểm thử (Unit test/Integration test) trong CI/CD pipeline, việc kết nối tới DB thật trên Cloud sẽ gây chậm, tốn chi phí và có nguy cơ làm hỏng dữ liệu thật.
 *   **Neon Local** là phiên bản giả lập Neon DB chạy bằng Docker Compose cục bộ. Lập trình viên có thể thoải mái chạy migration, test các câu lệnh SQL với tốc độ cực nhanh mà hoàn toàn cô lập, an toàn.
 
 ---
 
-## 🏗️ 6. Kiến Trúc 3 Thành Phần Cốt Lõi (Docker Architecture)
+## 6. Kiến Trúc 3 Thành Phần Cốt Lõi (Docker Architecture)
 
 Docker sử dụng kiến trúc **Client-Server**. Các thành phần chính bao gồm:
 
@@ -267,7 +267,7 @@ graph LR
     Daemon -- "Tìm & Tải Image nếu thiếu" --> DockerHub
 ```
 
-### 6.1. Chi tiết các thành phần:
+### 6.1. Chi tiết các thành phần
 *   **Docker Client (Trung tâm chỉ huy):** Là công cụ dòng lệnh (CLI - `docker` CLI) hoặc giao diện đồ họa (Docker Desktop) mà bạn trực tiếp gõ lệnh. Nó không trực tiếp build hay chạy container, mà chỉ đóng vai trò gửi yêu cầu (qua REST API) tới Docker Daemon.
     *   *Hình ảnh ẩn dụ:* Giống như một **đầu bếp trưởng** đưa ra các yêu cầu thực đơn.
 *   **Docker Host / Docker Daemon (Trực tiếp thực thi):** Là trái tim của Docker, chạy dưới nền hệ điều hành máy chủ. Nó trực tiếp quản lý các đối tượng như Images, Containers, Networks, và Volumes.
@@ -275,7 +275,7 @@ graph LR
 *   **Docker Registry / Docker Hub (Thư viện công thức):** Là kho lưu trữ tập trung để chia sẻ và quản lý các Docker Image. Bạn có thể kéo (`pull`) các image có sẵn về máy hoặc đẩy (`push`) image của mình lên.
     *   *Hình ảnh ẩn dụ:* Giống như **thư viện sách dạy nấu ăn khổng lồ** chứa hàng triệu công thức từ khắp nơi trên thế giới.
 
-### ❓ Mở rộng: "Daemon" là gì? Có giống "DAEMON Tools" hồi xưa hay dùng?
+### Mở rộng: "Daemon" là gì? Có giống "DAEMON Tools" hồi xưa hay dùng?
 > [!NOTE]
 > **Giải mã thuật ngữ "Daemon":**
 > *   **Daemon** (phát âm là *"de-mon"* hay *"day-mon"*) trong hệ điều hành Unix/Linux là **một chương trình chạy ngầm (background process)** mà không cần sự tương tác trực tiếp của người dùng qua giao diện đồ họa. Nó thường kết thúc bằng chữ **d** (ví dụ: `dockerd` cho Docker Daemon, `sshd` cho SSH Daemon, `systemd`...).
@@ -284,7 +284,7 @@ graph LR
 >     *   Thực tế, chữ **DAEMON** trong DAEMON Tools là viết tắt của **"Disk And Execution MONitor"**. Tuy nhiên, phần mềm này cũng hoạt động dưới dạng một dịch vụ chạy ngầm để giả lập phần cứng ổ đĩa ảo ngay trong Windows.
 >     *   Cả hai đều chia sẻ chung ý tưởng cốt lõi: Một "linh hồn" vô hình hoạt động âm thầm ở nền hệ thống để thực hiện các tác vụ nặng nhọc thay cho người dùng (lấy cảm hứng từ con quỷ Maxwell - *Maxwell's demon* trong vật lý học, luôn làm việc miệt mài ở hậu trường). Trong Docker, tiến trình này có tên là **`dockerd`**.
 
-### 🔄 Luồng hoạt động phối hợp:
+### Luồng hoạt động phối hợp
 Khi bạn gõ lệnh `docker run ubuntu`:
 1.  **Docker Client** tiếp nhận lệnh, dịch thành một API request gửi tới **Docker Daemon (`dockerd`)**.
 2.  **Docker Daemon** kiểm tra xem image `ubuntu` đã được tải về máy chủ (Host) chưa.
@@ -293,7 +293,7 @@ Khi bạn gõ lệnh `docker run ubuntu`:
 
 ---
 
-## 📋 7. Ba Quy Trình Làm Việc (Workflows) Với Docker
+## 7. Ba Quy Trình Làm Việc (Workflows) Với Docker
 
 Trong thực tế phát triển phần mềm, quy trình làm việc với Docker được nâng cấp dần từ thủ công lên tự động hóa hoàn toàn:
 
@@ -349,11 +349,11 @@ sequenceDiagram
 
 ---
 
-## 🧠 8. Kiến Thức Mở Rộng: Docker Hoạt Động Dưới Hạ Tầng Như Thế Nào?
+## 8. Kiến Thức Mở Rộng: Docker Hoạt Động Dưới Hạ Tầng Như Thế Nào?
 
 Để thực sự trở thành một "Hero" về DevOps, hãy tìm hiểu sâu hơn về cơ chế lõi của Docker trên nhân Linux:
 
-### 🧩 8.1. Namespaces và cgroups (Control Groups)
+### 8.1. Namespaces và cgroups (Control Groups)
 Docker Container không phải là một máy ảo thực sự, nó chỉ là một **tiến trình Linux (Linux Process)** được bao bọc bởi hai công nghệ của nhân Linux:
 1.  **Namespaces (Tính cô lập):** Cung cấp các ranh giới ảo giúp tiến trình bên trong container nghĩ rằng nó đang sở hữu một hệ điều hành riêng lẻ.
     *   `pid` namespace: Container chỉ thấy các tiến trình của chính nó (tiến trình chính bắt đầu bằng PID 1).
@@ -361,7 +361,7 @@ Docker Container không phải là một máy ảo thực sự, nó chỉ là m�
     *   `mnt` namespace: Hệ thống tệp tin (filesystem) riêng biệt.
 2.  **cgroups - Control Groups (Giới hạn tài nguyên):** Đảm bảo một container không chiếm dụng quá nhiều RAM/CPU của máy chủ dẫn tới làm sập các ứng dụng khác. Docker sử dụng cgroups để cấu hình giới hạn (ví dụ: tối đa 512MB RAM, 1 CPU).
 
-### 🥞 8.2. Cơ chế lưu trữ Layered File System (UnionFS)
+### 8.2. Cơ chế lưu trữ Layered File System (UnionFS)
 Docker Image được xây dựng bằng cơ chế **Union File System (UnionFS)**.
 *   Mỗi khi có một Layer mới (ví dụ: cài đặt thêm gói phần mềm), Docker không copy lại toàn bộ hệ thống file mà chỉ lưu phần **khác biệt (diff)** so với Layer trước đó.
 *   Các layer này là **Chỉ đọc (Read-only)**.

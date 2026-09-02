@@ -6,44 +6,44 @@ Tài liệu này cung cấp hướng dẫn chi tiết, toàn bộ các chỉ d�
 
 ## 📌 Mục Lục (Table of Contents)
 
-1. [1. Dockerfile là gì?](#1-dockerfile-là-gì)
-2. [2. Bảng Tra Cứu Chỉ Dẫn Dockerfile (Instruction Cheat Sheet)](#2-bảng-tra-cứu-chỉ-dẫn-dockerfile-instruction-cheat-sheet)
-3. [3. Đi Sâu Vào Các Khái Niệm Quan Trọng](#3-đi-sâu-vào-các-khái-niệm-quan-trọng)
-    * [3.1. Phân biệt COPY và ADD](#31-phân-biệt-copy-và-add)
-    * [3.2. Phân biệt CMD và ENTRYPOINT](#32-phân-biệt-cmd-và-entrypoint)
-    * [3.3. Phân biệt ARG và ENV](#33-phân-biệt-arg-và-env)
-    * [3.4. Bản Chất Và Cơ Chế Hoạt Động Của Chỉ Dẫn EXPOSE](#34-bản-chất-và-cơ-chế-hoạt-động-của-chỉ-dẫn-expose)
-        * [1. Lệnh EXPOSE Thực Sự Làm Gì?](#1-lệnh-expose-thực-sự-làm-gì)
-        * [2. So Sánh: Có EXPOSE và Không Có EXPOSE](#2-so-sánh-có-expose-và-không-có-expose)
-        * [3. Ứng Dụng Thực Tế Của EXPOSE](#3-ứng-dụng-thực-tế-của-expose)
-4. [4. Dockerfile Chuẩn Production (Node.js Multi-stage)](#4-dockerfile-chuẩn-production-nodejs-multi-stage)
-5. [5. Các Nguyên Tắc Vàng Giúp Dockerfile "Xịn" Hơn](#5-các-nguyên-tắc-vàng-giúp-dockerfile-xịn-hơn)
-    * [1. Luôn tạo file .dockerignore](#1-luôn-tạo-file-dockerignore)
-    * [2. Sắp xếp thứ tự các câu lệnh khoa học (Docker Layer Caching)](#2-sắp-xếp-thứ-tự-các-câu-lệnh-khoa-học-docker-layer-caching)
-    * [3. Giảm số lượng Layer bằng cách gộp lệnh](#3-giảm-số-lượng-layer-bằng-cách-gộp-lệnh)
-    * [4. Sử dụng Alpine hoặc Distroless làm Base Image](#4-sử-dụng-alpine-hoặc-distroless-làm-base-image)
-6. [6. Các Lệnh Docker CLI Cần Biết Để Làm Việc Với Dockerfile](#6-các-lệnh-docker-cli-cần-biết-để-làm-việc-với-dockerfile)
-    * [1. Nhóm Lệnh Build Image từ Dockerfile](#1-nhóm-lệnh-build-image-từ-dockerfile)
-    * [2. Nhóm Lệnh Xem và Quản Lý Image](#2-nhóm-lệnh-xem-và-quản-lý-image)
-    * [3. Nhóm Lệnh Khởi Chạy và Tương Tác với Container](#3-nhóm-lệnh-khởi-chạy-và-tương-tác-với-container)
-    * [4. Xem lịch sử xây dựng và dung lượng các Layer](#4-xem-lịch-sử-xây-dựng-và-dung-lượng-các-layer)
-7. [7. Thực Hành: Dockerfile Cho Dự Án React (Vite)](#7-thực-hành-dockerfile-cho-dự-án-react-vite)
-    * [7.1. Khởi tạo Dự Án](#71-khởi-tạo-dự-án)
-    * [7.2. Chi Tiết File Dockerfile](#72-chi-tiết-file-dockerfile)
-    * [7.3. Giải Thích Các Khái Niệm Cốt Lõi](#73-giải-thích-các-khái-niệm-cốt-lõi)
-        * [1. Tận Dụng Docker Layer Cache Cho Dependencies (COPY package*.json ./)](#1-tận-dụng-docker-layer-cache-cho-dependencies-copy-packagejson)
-        * [2. Chuỗi Quản Lý Quyền Sở Hữu (Ownership Chain / Permissions)](#2-chuỗi-quản-lý-quyền-sở-hữu-ownership-chain--permissions)
-        * [3. Vai Trò Của Tệp .dockerignore (.dockerignore)](#3-vai-trò-của-tệp-dockerignore-dockerignore)
-    * [7.4. Hướng Dẫn Vận Hành & Khắc Phục Lỗi Thực Tế](#74-hướng-dẫn-vận-hành--khắc-phục-lỗi-thực-tế)
-        * [1. Tại sao chạy docker run -p 5173:5173 react-docker vẫn báo lỗi?](#1-tại-sao-chạy-docker-run--p-51735173-react-docker-vẫn-báo-lỗi)
-        * [2. Vấn đề Hot Reload (Sửa code trên máy host không thay đổi trên UI)](#2-vấn-đề-hot-reload-sửa-code-trên-máy-host-không-thay-đổi-trên-ui)
-        * [3. Đăng Tải Image Lên Docker Hub (Docker Registry)](#3-đăng-tải-image-lên-docker-hub-docker-registry)
-        * [4. Bảng tra cứu các lệnh Docker CLI quản lý Container](#4-bảng-tra-cứu-các-lệnh-docker-cli-quản-lý-container)
-8. [8. Câu Hỏi Thường Gặp (Q&A)](#8-câu-hỏi-thường-gặp-qa)
+- [1. Dockerfile là gì?](#1-dockerfile-là-gì)
+- [2. Bảng Tra Cứu Chỉ Dẫn Dockerfile (Instruction Cheat Sheet)](#2-bảng-tra-cứu-chỉ-dẫn-dockerfile-instruction-cheat-sheet)
+- [3. Đi Sâu Vào Các Khái Niệm Quan Trọng](#3-đi-sâu-vào-các-khái-niệm-quan-trọng)
+  - [3.1. Phân biệt `COPY` và `ADD`](#31-phân-biệt-copy-và-add)
+  - [3.2. Phân biệt `CMD` và `ENTRYPOINT`](#32-phân-biệt-cmd-và-entrypoint)
+  - [3.3. Phân biệt `ARG` và `ENV`](#33-phân-biệt-arg-và-env)
+  - [3.4. Bản Chất Và Cơ Chế Hoạt Động Của Chỉ Dẫn `EXPOSE`](#34-bản-chất-và-cơ-chế-hoạt-động-của-chỉ-dẫn-expose)
+    - [1. Lệnh `EXPOSE` Thực Sự Làm Gì?](#1-lệnh-expose-thực-sự-làm-gì)
+    - [2. So Sánh: Có `EXPOSE` và Không Có `EXPOSE`](#2-so-sánh-có-expose-và-không-có-expose)
+    - [3. Ứng Dụng Thực Tế Của `EXPOSE`](#3-ứng-dụng-thực-tế-của-expose)
+- [4. Dockerfile Chuẩn Production (Node.js Multi-stage)](#4-dockerfile-chuẩn-production-nodejs-multi-stage)
+- [5. Các Nguyên Tắc Vàng Để Dockerfile "Xịn" Hơn](#5-các-nguyên-tắc-vàng-để-dockerfile-xịn-hơn)
+  - [1. Luôn tạo file `.dockerignore`](#1-luôn-tạo-file-dockerignore)
+  - [2. Sắp xếp thứ tự các câu lệnh khoa học (Docker Layer Caching)](#2-sắp-xếp-thứ-tự-các-câu-lệnh-khoa-học-docker-layer-caching)
+  - [3. Giảm số lượng Layer bằng cách gộp lệnh](#3-giảm-số-lượng-layer-bằng-cách-gộp-lệnh)
+  - [4. Sử dụng Alpine hoặc Distroless làm Base Image](#4-sử-dụng-alpine-hoặc-distroless-làm-base-image)
+- [6. Các Lệnh Docker CLI Cần Biết Để Làm Việc Với Dockerfile](#6-các-lệnh-docker-cli-cần-biết-để-làm-việc-với-dockerfile)
+  - [1. Nhóm Lệnh Build Image từ Dockerfile](#1-nhóm-lệnh-build-image-từ-dockerfile)
+  - [2. Nhóm Lệnh Xem và Quản Lý Image](#2-nhóm-lệnh-xem-và-quản-lý-image)
+  - [3. Nhóm Lệnh Khởi Chạy và Tương Tác với Container](#3-nhóm-lệnh-khởi-chạy-và-tương-tác-với-container)
+  - [4. Xem lịch sử xây dựng và dung lượng các Layer](#4-xem-lịch-sử-xây-dựng-và-dung-lượng-các-layer)
+- [7. Thực Hành: Dockerfile Cho Dự Án React (Vite)](#7-thực-hành-dockerfile-cho-dự-án-react-vite)
+  - [7.1. Khởi tạo Dự án](#71-khởi-tạo-dự-án)
+  - [7.2. Chi Tiết File Dockerfile](#72-chi-tiết-file-dockerfile)
+  - [7.3. Giải Thích Các Khái Niệm Cốt Lõi](#73-giải-thích-các-khái-niệm-cốt-lõi)
+    - [1. Tận Dụng Docker Layer Cache Cho Dependencies (`COPY package*.json ./`)](#1-tận-dụng-docker-layer-cache-cho-dependencies-copy-packagejson)
+    - [2. Chuỗi Quản Lý Quyền Sở Hữu (Ownership Chain / Permissions)](#2-chuỗi-quản-lý-quyền-sở-hữu-ownership-chain-permissions)
+    - [3. Vai Trò Của Tệp `.dockerignore` (`.dockerignore`)](#3-vai-trò-của-tệp-dockerignore-dockerignore)
+  - [7.4. Hướng Dẫn Vận Hành & Khắc Phục Lỗi Thực Tế](#74-hướng-dẫn-vận-hành-khắc-phục-lỗi-thực-tế)
+    - [1. Tại sao chạy `docker run -p 5173:5173 react-docker` vẫn báo lỗi?](#1-tại-sao-chạy-docker-run--p-51735173-react-docker-vẫn-báo-lỗi)
+    - [2. Vấn đề Hot Reload (Sửa code trên máy host không thay đổi trên UI)](#2-vấn-đề-hot-reload-sửa-code-trên-máy-host-không-thay-đổi-trên-ui)
+    - [3. Đăng Tải Image Lên Docker Hub (Docker Registry)](#3-đăng-tải-image-lên-docker-hub-docker-registry)
+    - [4. Bảng tra cứu các lệnh Docker CLI quản lý Container](#4-bảng-tra-cứu-các-lệnh-docker-cli-quản-lý-container)
+- [8. Câu Hỏi Thường Gặp (Q&A)](#8-câu-hỏi-thường-gặp-qa)
 
 ---
 
-## 🧭 1. Dockerfile là gì?
+## 1. Dockerfile là gì?
 
 **Dockerfile** là một tệp văn bản không có phần mở rộng (extension) chứa một chuỗi các câu lệnh tuần tự. Docker sẽ đọc tệp này để tự động xây dựng (**build**) nên một **Docker Image**.
 
@@ -55,7 +55,7 @@ graph TD
 
 ---
 
-## 🛠️ 2. Bảng Tra Cứu Chỉ Dẫn Dockerfile (Instruction Cheat Sheet)
+## 2. Bảng Tra Cứu Chỉ Dẫn Dockerfile (Instruction Cheat Sheet)
 
 Dưới đây là toàn bộ các chỉ dẫn thông dụng nhất trong Dockerfile, xếp theo thứ tự sử dụng phổ biến:
 
@@ -77,7 +77,7 @@ Dưới đây là toàn bộ các chỉ dẫn thông dụng nhất trong Dockerf
 
 ---
 
-## 🔍 3. Đi Sâu Vào Các Khái Niệm Quan Trọng
+## 3. Đi Sâu Vào Các Khái Niệm Quan Trọng
 
 ### 3.1. Phân biệt `COPY` và `ADD`
 *   **`COPY`**: Đơn thuần là sao chép tệp cục bộ từ máy của bạn vào container. Rất an toàn và rõ ràng.
@@ -138,7 +138,7 @@ Nhiều người mới học Docker thường hiểu lầm rằng viết `EXPOSE
 
 ---
 
-## ⚡ 4. Dockerfile Chuẩn Production (Node.js Multi-stage)
+## 4. Dockerfile Chuẩn Production (Node.js Multi-stage)
 
 Dưới đây là một Dockerfile mẫu được tối ưu hóa tối đa cho các dự án Node.js/TypeScript sử dụng kỹ thuật **Multi-stage Build**, **Bảo mật phi Root**, và **Dependency Caching**.
 
@@ -200,7 +200,7 @@ CMD ["node", "dist/index.js"]
 
 ---
 
-## 🎯 5. Các Nguyên Tắc Vàng Để Dockerfile "Xịn" Hơn
+## 5. Các Nguyên Tắc Vàng Để Dockerfile "Xịn" Hơn
 
 ### 1. Luôn tạo file `.dockerignore`
 Trước khi gửi các tệp lên Docker Daemon để build, Docker sẽ copy toàn bộ thư mục của bạn. Nếu không có `.dockerignore`, các thư mục nặng như `node_modules`, `.git`, `.env` sẽ bị bê vào gây chậm tiến trình build và lộ dữ liệu mật.
@@ -244,7 +244,7 @@ Mỗi lệnh `RUN`, `COPY`, `ADD` sẽ tạo ra một Layer mới làm tăng dun
 
 ---
 
-## 💻 6. Các Lệnh Docker CLI Cần Biết Để Làm Việc Với Dockerfile
+## 6. Các Lệnh Docker CLI Cần Biết Để Làm Việc Với Dockerfile
 
 ### 1. Nhóm Lệnh Build Image từ Dockerfile
 ```bash
@@ -291,7 +291,7 @@ docker history my-api:1.0.0
 
 ---
 
-## 🐳 7. Thực Hành: Dockerfile Cho Dự Án React (Vite)
+## 7. Thực Hành: Dockerfile Cho Dự Án React (Vite)
 
 Trong phần này, chúng ta sẽ đi sâu phân tích tệp `dockerfile` thực tế của dự án React được khởi tạo bằng công cụ **Vite**. Qua đó làm rõ hai khái niệm nâng cao rất quan trọng: **Tận dụng bộ nhớ đệm (Layer Caching)** và **Chuỗi quản lý quyền sở hữu tệp (Ownership Chain / Permissions)**.
 
@@ -305,7 +305,7 @@ npm create vite@latest react-docker -- --template react-ts
 ---
 
 ### 7.2. Chi Tiết File Dockerfile
-Dưới đây là nội dung đầy đủ của file [dockerfile](file:///E:/08_Project/Devops_Course/CI_CD_Master/2_2_React_Docker/react-docker/dockerfile) cấu hình cho môi trường Development của dự án:
+Dưới đây là nội dung đầy đủ của file [dockerfile](./2_2_React_Docker/react-docker/dockerfile) cấu hình cho môi trường Development của dự án:
 
 ```dockerfile
 # set the base image to create the image for react app
@@ -374,7 +374,7 @@ COPY package*.json ./
     *   Quá trình chạy `npm install` để cài đặt thư viện thường mất nhiều thời gian và băng thông nhất. Bằng cách tách biệt việc copy `package*.json` và chạy `npm install` lên trên trước khi copy toàn bộ mã nguồn (`COPY . .`), chúng ta đảm bảo rằng **chỉ khi danh sách thư viện trong `package.json` thay đổi** thì Docker mới cài lại dependencies.
     *   Nếu bạn chỉ thay đổi code React thông thường (ví dụ sửa file `App.tsx`), Docker sẽ nhận diện các layer chứa `package.json` và `npm install` vẫn giữ nguyên $\rightarrow$ Docker sử dụng trực tiếp Cache cho các bước này $\rightarrow$ Tốc độ build lại (rebuild) Image chỉ mất **vài giây** thay vì phải đợi cài đặt lại toàn bộ thư viện.
 
-#### 🔑 2. Chuỗi Quản Lý Quyền Sở Hữu (Ownership Chain / Permissions)
+#### 2. Chuỗi Quản Lý Quyền Sở Hữu (Ownership Chain / Permissions)
 Hãy quan sát đoạn mã chuyển đổi quyền sở hữu đặc biệt sau:
 ```dockerfile
 # Đang ở quyền user 'app' (thiết lập từ dòng trước đó)
@@ -425,8 +425,8 @@ RUN npm install
 > ```
 > *Cách viết này giúp Dockerfile cực kỳ sạch sẽ, loại bỏ hoàn toàn các dòng `USER root` và `chown -R`.*
 
-#### 🛡️ 3. Vai Trò Của Tệp `.dockerignore` (`.dockerignore`)
-Tệp [`.dockerignore`](file:///E:/08_Project/Devops_Course/CI_CD_Master/2_2_React_Docker/react-docker/.dockerignore) trong dự án được định nghĩa tinh giản:
+#### 3. Vai Trò Của Tệp `.dockerignore` (`.dockerignore`)
+Tệp [`.dockerignore`](./2_2_React_Docker/react-docker/.dockerignore) trong dự án được định nghĩa tinh giản:
 ```text
 node_modules
 ```
@@ -475,7 +475,7 @@ Dưới đây là chu trình chạy thử nghiệm, phân tích các lỗi phân
     > [!IMPORTANT]
     > **Lưu ý đặc biệt cho người dùng Windows (WSL 2 / Hyper-V):**
     > *   **Vấn đề:** Khi sử dụng tính năng Mount Volume trên Windows, các sự kiện thay đổi file của hệ thống (như `inotify` của Linux) đôi khi **không** truyền qua được phân vùng đĩa Windows sang Linux container. Kết quả là mặc dù code bên máy host đã sửa nhưng Vite server bên trong container không biết để load lại UI.
-    *   **Cách khắc phục:** Ta cần cấu hình cho Vite chuyển sang cơ chế **Polling (quét tệp tin liên tục)** bằng cách thêm mục `server.watch.usePolling: true` vào file cấu hình [`vite.config.ts`](file:///E:/08_Project/Devops_Course/CI_CD_Master/2_2_React_Docker/react-docker/vite.config.ts):
+    *   **Cách khắc phục:** Ta cần cấu hình cho Vite chuyển sang cơ chế **Polling (quét tệp tin liên tục)** bằng cách thêm mục `server.watch.usePolling: true` vào file cấu hình [`vite.config.ts`](./2_2_React_Docker/react-docker/vite.config.ts):
     *   ```typescript
         export default defineConfig({
           plugins: [react()],
@@ -553,7 +553,7 @@ Khi thực hành chạy container, bạn cần sử dụng các lệnh CLI sau �
     docker container prune
     ```
 
-## ❓ 8. Câu Hỏi Thường Gặp (Q&A)
+## 8. Câu Hỏi Thường Gặp (Q&A)
 
 ### Q1: Dấu chấm `.` ở cuối lệnh `docker build -t <image-name> .` nghĩa là gì?
 *   **Trả lời:** Dấu chấm `.` đại diện cho **Build Context** (thư mục hiện tại). 

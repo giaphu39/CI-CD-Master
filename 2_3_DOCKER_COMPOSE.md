@@ -6,31 +6,31 @@ Tài liệu này giải thích tại sao nên sử dụng Docker Compose, quy tr
 
 ## 📌 Mục Lục (Table of Contents)
 
-1. [1. Tại Sao Nên Dùng Docker Compose?](#1-tại-sao-nên-dùng-docker-compose)
-    * [Giải pháp: Docker Compose](#giải-pháp-docker-compose)
-2. [2. Sử Dụng `docker init` Để Tự Động Khởi Tạo Docker](#2-sử-dụng-docker-init-để-tự-động-khởi-tạo-docker)
-    * [Các Bước Thực Hiện Chi Tiết](#các-bước-thực-hiện-chi-tiết)
-    * [Các Tệp Tin Được Tự Động Tạo Ra](#các-tệp-tin-được-tự-động-tạo-ra)
-    * [Lưu ý đặt tên tham khảo (`_Init` / `_init`)](#lưu-y-đặt-tên-tham-khảo-_init--_init)
-3. [3. Cấu Hình Dự Án React (Vite) Cho Môi Trường Development](#3-cấu-hình-dự-án-react-vite-cho-môi-trường-development)
-    * [3.1. Cấu hình Vite lắng nghe ở IP `0.0.0.0`](#31-cấu-hình-vite-lắng-nghe-ở-ip-0000)
-    * [3.2. Cấu hình Polling Hot Reload trên Windows (WSL2 / Hyper-V)](#32-cấu-hình-polling-hot-reload-trên-windows-wsl2--hyper-v)
-4. [4. Xây Dựng Cấu Hình Dev Tùy Biến (Custom Config)](#4-xây-dựng-cấu-hình-dev-tùy-biến-custom-config)
-    * [4.1. Tệp `dockerfile` Tự Cấu Hình](#41-tệp-dockerfile-tự-cấu-hình)
-    * [4.2. Tệp `compose.yaml` Tự Cấu Hình](#42-tệp-composeyaml-tự-cấu-hình)
-5. [5. Vòng Đời Của Container & Cách Kết Nối Lại Khi Sử Dụng Sau Này](#5-vòng-đời-của-container--cách-kết-nối-lại-khi-sử-dụng-sau-này)
-    * [5.1. Các Trạng Thái Vòng Đời của Docker Compose](#51-các-trạng-thái-vòng-đời-của-docker-compose)
-    * [5.2. Hướng Dẫn Từng Bước Kết Nối Lại Sau Lần Chạy Đầu Tiên](#52-hướng-dẫn-từng-bước-kết-nối-lại-sau-lần-chạy-đầu-tiên)
-    * [5.3. Khởi Tạo Nhiều Container & Cấu Hình Tên Image/Container Trong Compose](#53-khởi-tạo-nhiều-container--cấu-hình-tên-imagecontainer-trong-compose)
-6. [6. Bảng Tra Cứu Các Lệnh Docker Compose Thường Dùng](#6-bảng-tra-cứu-các-lệnh-docker-compose-thường-dùng)
-7. [7. Giải Thích Chi Tiết Các Trường Cấu Hình Trong YAML (Compose Specs)](#7-giải-thích-chi-tiết-các-trường-cấu-hình-trong-yaml-compose-specs)
-    * [7.1. Nhóm Cấu Hình Cho Dịch Vụ Core (Core Services)](#71-nhóm-cấu-hình-cho-dịch-vụ-core-core-services)
-    * [7.2. Nhóm Cấu Hinh Đa Container Nâng Cao (Multi-Container / Database Specs)](#72-nhóm-cấu-hình-đa-container-nâng-cao-multi-container--database-specs)
-    * [7.3. Nhóm Khai Báo Toàn Cục (Top-level Declarations)](#73-nhóm-khai-báo-toàn-cục-top-level-declarations)
+- [1. Tại Sao Nên Dùng Docker Compose?](#1-tại-sao-nên-dùng-docker-compose)
+  - [Giải pháp: Docker Compose](#giải-pháp-docker-compose)
+- [2. Sử Dụng `docker init` Để Tự Động Khởi Tạo Docker](#2-sử-dụng-docker-init-để-tự-động-khởi-tạo-docker)
+  - [Các Bước Thực Hiện Chi Tiết](#các-bước-thực-hiện-chi-tiết)
+  - [Các Tệp Tin Được Tự Động Tạo Ra](#các-tệp-tin-được-tự-động-tạo-ra)
+  - [Lưu ý đặt tên tham khảo (`_Init` / `_init`)](#lưu-ý-đặt-tên-tham-khảo-init-init)
+- [3. Cấu Hình Dự Án React (Vite) Cho Môi Trường Development](#3-cấu-hình-dự-án-react-vite-cho-môi-trường-development)
+  - [3.1. Cấu hình Vite lắng nghe ở IP `0.0.0.0`](#31-cấu-hình-vite-lắng-nghe-ở-ip-0000)
+  - [3.2. Cấu hình Polling Hot Reload trên Windows (WSL2 / Hyper-V)](#32-cấu-hình-polling-hot-reload-trên-windows-wsl2-hyper-v)
+- [4. Xây Dựng Cấu Hình Dev Tùy Biến (Custom Config)](#4-xây-dựng-cấu-hình-dev-tùy-biến-custom-config)
+  - [4.1. Tệp `dockerfile` Tự Cấu Hình](#41-tệp-dockerfile-tự-cấu-hình)
+  - [4.2. Tệp `compose.yaml` Tự Cấu Hình](#42-tệp-composeyaml-tự-cấu-hình)
+- [5. Vòng Đời Của Container & Cách Kết Nối Lại Khi Sử Dụng Sau Này](#5-vòng-đời-của-container-cách-kết-nối-lại-khi-sử-dụng-sau-này)
+  - [5.1. Các Trạng Thái Vòng Đời của Docker Compose](#51-các-trạng-thái-vòng-đời-của-docker-compose)
+  - [5.2. Hướng Dẫn Từng Bước Kết Nối Lại Sau Lần Chạy Đầu Tiên](#52-hướng-dẫn-từng-bước-kết-nối-lại-sau-lần-chạy-đầu-tiên)
+  - [5.3. Khởi Tạo Nhiều Container & Cấu Hình Tên Image/Container Trong Compose](#53-khởi-tạo-nhiều-container-cấu-hình-tên-imagecontainer-trong-compose)
+- [6. Bảng Tra Cứu Các Lệnh Docker Compose Thường Dùng](#6-bảng-tra-cứu-các-lệnh-docker-compose-thường-dùng)
+- [7. Giải Thích Chi Tiết Các Trường Cấu Hình Trong YAML (Compose Specs)](#7-giải-thích-chi-tiết-các-trường-cấu-hình-trong-yaml-compose-specs)
+  - [7.1. Nhóm Cấu Hình Cho Dịch Vụ Core (Core Services)](#71-nhóm-cấu-hình-cho-dịch-vụ-core-core-services)
+  - [7.2. Nhóm Cấu Hình Đa Container Nâng Cao (Multi-Container / Database Specs)](#72-nhóm-cấu-hình-đa-container-nâng-cao-multi-container-database-specs)
+  - [7.3. Nhóm Khai Báo Toàn Cục (Top-level Declarations)](#73-nhóm-khai-báo-toàn-cục-top-level-declarations)
 
 ---
 
-## 🧭 1. Tại Sao Nên Dùng Docker Compose?
+## 1. Tại Sao Nên Dùng Docker Compose?
 
 Khi làm việc với Docker cơ bản (sử dụng Docker CLI thông thường), chu trình xây dựng và chạy ứng dụng thường qua các bước thủ công phức tạp:
 1. Build image: `docker build -t react-docker .`
@@ -44,7 +44,7 @@ Khi dự án trở nên phức tạp hơn (ví dụ: cần thêm cơ sở dữ l
 * **Quản lý khó khăn:** Rất khó để cấu hình thủ công hệ thống mạng nội bộ (`Docker Network`) để các container kết nối được với nhau, hoặc tạo ổ đĩa chia sẻ dữ liệu (`Docker Volume`).
 * **Không đồng bộ:** Các thành viên khác trong team phải tự gõ lại các câu lệnh run với tham số cấu hình riêng, dễ dẫn đến lỗi môi trường khác biệt.
 
-### 💡 Giải pháp: Docker Compose
+### Giải pháp: Docker Compose
 **Docker Compose** là một công cụ giúp định nghĩa và quản lý đa container (multi-container) cho ứng dụng Docker. Toàn bộ cấu hình về **dịch vụ (services), mạng (networks), và phân vùng ổ đĩa (volumes)** sẽ được khai báo rõ ràng trong duy nhất một tệp tin cấu hình định dạng YAML (thường đặt tên là `compose.yaml` hoặc `docker-compose.yml`).
 
 > [!TIP]
@@ -56,11 +56,11 @@ Khi dự án trở nên phức tạp hơn (ví dụ: cần thêm cơ sở dữ l
 
 ---
 
-## 🚀 2. Sử Dụng `docker init` Để Tự Động Khởi Tạo Docker
+## 2. Sử Dụng `docker init` Để Tự Động Khởi Tạo Docker
 
 Docker cung cấp lệnh `docker init` để quét thư mục mã nguồn hiện tại, tự động nhận diện công nghệ đang dùng (Node.js, Python, Go, Rust, v.v.) và sinh ra các file cấu hình Docker mẫu chuẩn hóa.
 
-### 🛠️ Các Bước Thực Hiện Chi Tiết
+### Các Bước Thực Hiện Chi Tiết
 
 #### Bước 1: Khởi tạo dự án Vite (nếu làm từ đầu)
 Di chuyển vào thư mục mong muốn và tạo dự án React + Vite:
@@ -99,35 +99,35 @@ Docker CLI sẽ hiển thị các câu hỏi gợi ý, bạn hãy cấu hình th
 
 ---
 
-### 📂 Các Tệp Tin Được Tự Động Tạo Ra
+### Các Tệp Tin Được Tự Động Tạo Ra
 
 Sau khi hoàn tất các bước trên, Docker sẽ tạo ra 4 tệp tin:
-1. [`Dockerfile`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/Dockerfile): Chứa các bước chỉ dẫn đóng gói ứng dụng.
-2. [`.dockerignore`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/.dockerignore): Khai báo danh sách các file/folder không đưa vào Docker build context (như `node_modules`).
-3. [`compose.yaml`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/compose.yaml): Tệp cấu hình dịch vụ chạy bằng Docker Compose.
-4. [`README.Docker.md`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/README.Docker.md): Hướng dẫn nhanh cách vận hành container vừa tạo.
+1. [`Dockerfile`](./2_3_React_Docker_Compose/Dockerfile): Chứa các bước chỉ dẫn đóng gói ứng dụng.
+2. [`.dockerignore`](./2_3_React_Docker_Compose/.dockerignore): Khai báo danh sách các file/folder không đưa vào Docker build context (như `node_modules`).
+3. [`compose.yaml`](./2_3_React_Docker_Compose/compose.yaml): Tệp cấu hình dịch vụ chạy bằng Docker Compose.
+4. [`README.Docker.md`](./2_3_React_Docker_Compose/README.Docker.md): Hướng dẫn nhanh cách vận hành container vừa tạo.
 
-### ⚠️ Lưu ý đặt tên tham khảo (`_Init` / `_init`)
+### Lưu ý đặt tên tham khảo (`_Init` / `_init`)
 Mẫu cấu hình được sinh ra bởi `docker init` mặc định được tối ưu cho chạy Production hoặc chạy cơ bản. Để phục vụ việc học tập, tham chiếu và tự cấu hình nâng cao cho môi trường Dev (Hot Reload, phân quyền tối ưu), chúng ta nên:
-* Đổi tên `Dockerfile` mặc định thành [`Dockerfile_Init`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/Dockerfile_Init).
-* Đổi tên `compose.yaml` mặc định thành [`compose_Init.yaml`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/compose_Init.yaml).
+* Đổi tên `Dockerfile` mặc định thành [`Dockerfile_Init`](./2_3_React_Docker_Compose/Dockerfile_Init).
+* Đổi tên `compose.yaml` mặc định thành [`compose_Init.yaml`](./2_3_React_Docker_Compose/compose_Init.yaml).
 
 *Từ đó, chúng ta sẽ tự viết lại tệp `dockerfile` và `compose.yaml` tùy biến theo nhu cầu phát triển.*
 
 ---
 
-## ⚙️ 3. Cấu Hình Dự Án React (Vite) Cho Môi Trường Development
+## 3. Cấu Hình Dự Án React (Vite) Cho Môi Trường Development
 
 Để chạy ứng dụng React (Vite) mượt mà trong Docker container và hỗ trợ **Hot Reload (sửa code máy host, UI tự cập nhật)**, chúng ta cần thực hiện các cấu hình lặp lại từ bài trước nhưng cực kỳ quan trọng:
 
 ### 3.1. Cấu hình Vite lắng nghe ở IP `0.0.0.0`
-Mặc định Vite chỉ chạy trên `localhost` (`127.0.0.1`) của container, khiến máy host không kết nối được. Cần chỉnh sửa script khởi chạy trong [`package.json`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/package.json):
+Mặc định Vite chỉ chạy trên `localhost` (`127.0.0.1`) của container, khiến máy host không kết nối được. Cần chỉnh sửa script khởi chạy trong [`package.json`](./2_3_React_Docker_Compose/package.json):
 ```json
 "scripts": {
   "dev": "vite --host 0.0.0.0"
 }
 ```
-Hoặc cấu hình trực tiếp vào [`vite.config.ts`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/vite.config.ts):
+Hoặc cấu hình trực tiếp vào [`vite.config.ts`](./2_3_React_Docker_Compose/vite.config.ts):
 ```typescript
 export default defineConfig({
   server: {
@@ -138,7 +138,7 @@ export default defineConfig({
 ```
 
 ### 3.2. Cấu hình Polling Hot Reload trên Windows (WSL2 / Hyper-V)
-Nếu bạn lập trình trên Windows và mount thư mục vào Linux container, cơ chế bắt sự kiện thay đổi file mặc định của hệ điều hành có thể không hoạt động. Ta cần bật cơ chế quét định kỳ (polling) trong [`vite.config.ts`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/vite.config.ts):
+Nếu bạn lập trình trên Windows và mount thư mục vào Linux container, cơ chế bắt sự kiện thay đổi file mặc định của hệ điều hành có thể không hoạt động. Ta cần bật cơ chế quét định kỳ (polling) trong [`vite.config.ts`](./2_3_React_Docker_Compose/vite.config.ts):
 ```typescript
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -157,12 +157,12 @@ export default defineConfig({
 
 ---
 
-## 🛠️ 4. Xây Dựng Cấu Hình Dev Tùy Biến (Custom Config)
+## 4. Xây Dựng Cấu Hình Dev Tùy Biến (Custom Config)
 
 Dưới đây là nội dung chi tiết của tệp `dockerfile` và `compose.yaml` tùy biến được thiết kế dành riêng cho môi trường lập trình (Development) có phân quyền bảo mật cao:
 
 ### 4.1. Tệp `dockerfile` Tự Cấu Hình
-Lưu tại: [`2_3_React_Docker_Compose/dockerfile`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/dockerfile)
+Lưu tại: [`2_3_React_Docker_Compose/dockerfile`](./2_3_React_Docker_Compose/dockerfile)
 ```dockerfile
 # Sử dụng base image nhẹ Alpine
 FROM node:20-alpine
@@ -192,8 +192,32 @@ EXPOSE 5173
 CMD ["npm", "run", "dev"]
 ```
 
+> [!NOTE]
+> **Giải thích chi tiết các câu lệnh quan trọng trong `dockerfile` trên:**
+>
+> 1. **Cơ chế tạo User & Group phi Root (`addgroup` & `adduser`):**
+>    * `RUN addgroup app`: Tạo một nhóm (group) hệ thống mới có tên là `app`.
+>    * `adduser -S -G app app`: Tạo một user hệ thống mới tên `app` và đưa user này vào nhóm `app` (`-G app`).
+>    * **Option `-S`:** Viết tắt của `--system` (Alpine Linux), tạo user hệ thống chuyên dụng chạy tiến trình nền, không có mật khẩu và không thể đăng nhập shell tương tác nhằm nâng cao bảo mật.
+>
+> 2. **Cơ chế phân quyền sở hữu (`chown`):**
+>    * `RUN chown -R app:app .`:
+>      * `chown`: Lệnh thay đổi quyền sở hữu (owner:group) của file hoặc thư mục.
+>      * `-R`: Viết tắt của Recursive (đệ quy), áp dụng cho toàn bộ file và thư mục con bên trong thư mục hiện tại (`.`).
+>      * `app:app`: Chỉ định chủ sở hữu mới là user `app` và group `app`.
+>    * 💡 **Lưu ý kỹ thuật:** Lệnh này cần chạy khi Dockerfile đang ở quyền `root` (trước câu lệnh `USER app`), hoặc có thể tối ưu bằng flag `COPY --chown=app:app package*.json ./`. Nếu chuyển sang `USER app` quá sớm, user này sẽ không đủ đặc quyền để chạy `chown`.
+>
+> 3. **Cơ chế Layer Cache (Tách `package*.json` ra trước) & Thời điểm tác dụng thực tế:**
+>    * **Kịch bản 1: Cách làm thông thường (`COPY . .` rồi `RUN npm install`)**
+>      * Khi bạn chỉ sửa 1 dòng code trong `src/App.jsx`: `COPY . .` làm vỡ cache $\rightarrow$ `RUN npm install` bắt buộc phải chạy lại từ đầu $\rightarrow$ **Mất 2-5 phút chờ tải lại thư viện.**
+>    * **Kịch bản 2: Cách làm chuẩn (Tách `package*.json` ra trước)**
+>      * Khi bạn sửa code trong `src/App.jsx`: File `package.json` không đổi $\rightarrow$ **Tái sử dụng Cache** của bước `npm install` $\rightarrow$ Chỉ copy lại file code ở bước `COPY . .` $\rightarrow$ **Build xong chỉ trong 1-2 giây!**
+>    * ⚡ **LƯU Ý QUAN TRỌNG VỀ THỜI ĐIỂM TÁC DỤNG:**
+>      * ❌ **Lúc gõ code hàng ngày (Container ĐANG CHẠY):** File `dockerfile` hoàn toàn "ngủ đông". Code bạn sửa cập nhật ngay lên trình duyệt là nhờ **Bind Mount (`- .:/app`)** trong `compose.yaml`. Hoàn toàn không có lệnh `COPY` hay `npm install` nào chạy lại lúc này.
+>      * ✅ **Lúc Build lại Image (Tạo mới từ đầu):** Khi bạn cài thêm thư viện mới, đổi branch, dựng container lần đầu hoặc đưa project sang máy khác. Đây mới chính là lúc 3 dòng code này phát huy tác dụng giúp tái sử dụng Cache, rút ngắn thời gian khởi tạo từ vài phút xuống còn vài giây.
+
 ### 4.2. Tệp `compose.yaml` Tự Cấu Hình
-Lưu tại: [`2_3_React_Docker_Compose/compose.yaml`](file:///e:/08_Project/Devops_Course/CI_CD_Master/2_3_React_Docker_Compose/compose.yaml)
+Lưu tại: [`2_3_React_Docker_Compose/compose.yaml`](./2_3_React_Docker_Compose/compose.yaml)
 ```yaml
 services:
   web:
@@ -208,26 +232,37 @@ services:
 ```
 
 > [!IMPORTANT]
-> **Giải thích bản chất cơ chế `volumes` trong dự án React Dev:**
+> **Giải thích bản chất cơ chế `volumes` & Vòng đời dữ liệu (Phân biệt Build time vs Run time):**
 >
-> Bản chất của 2 dòng volume này hoàn toàn khác nhau, và **chìa khóa nằm ở dấu hai chấm `:`**:
+> 1. **Dòng 1: `- .:/app` (Bind Mount - Có dấu hai chấm `:`):**
+>    * Tạo "đường ống trực tiếp" đồng bộ thư mục mã nguồn từ máy thật (`.`) vào `/app` trong container. Nhờ đó sửa code ở máy host thì container nhận ngay lập tức.
+>    * *Điểm yếu:* Nó sẽ đè toàn bộ thư mục máy thật lên `/app`, làm che mất thư mục `node_modules` đã cài trong container.
 >
-> 1. **Dòng 1: `- .:/app` (Gọi là Bind Mount - Có dấu hai chấm `:`):**
->    * **Cú pháp:** Cấu trúc dạng `<máy_thật>:<container>`.
->    * **Ý nghĩa:** Ánh xạ/Bắc cầu trực tiếp từ thư mục mã nguồn ở máy thật của bạn (`.`) vào thư mục `/app` trong container. Nhờ đó, bạn sửa code ở máy host thì container cập nhật ngay (Hot Reload).
->    * **Điểm yếu:** Nó sẽ đè toàn bộ thư mục máy thật lên `/app` của container, vô tình che mất (hoặc xóa sạch) thư mục chứa các thư viện đã build sẵn trong container (`/app/node_modules`).
+> 2. **Dòng 2: `- /app/node_modules` (Anonymous Volume - KHÔNG có dấu hai chấm `:`):**
+>    * Tạo một ổ đĩa ảo cô lập trên Docker host cho riêng đường dẫn `/app/node_modules`, đóng vai trò là "vùng cấm" bảo vệ thư viện chuẩn Linux không bị máy host đè hỏng.
 >
-> 2. **Dòng 2: `- /app/node_modules` (Gọi là Anonymous Volume - KHÔNG có dấu hai chấm `:`):**
->    * **Cú pháp:** Chỉ khai báo duy nhất đường dẫn bên trong container.
->    * **Ý nghĩa:** Docker tự động tạo ra một ổ đĩa ảo cô lập trên ổ cứng của nó và gắn vào đường dẫn này của container.
+> 🔄 **Bản chất thực tế (Trả lời câu hỏi về thời điểm chạy `npm install`):**
+> * ❌ **Hiểu lầm phổ biến:** Nghĩ rằng Docker tạo volume trống rồi mới chạy `RUN npm install` bên trong volume đó.
+> * ✅ **Thực tế diễn ra qua 2 giai đoạn rõ rệt:**
+>   * **Giai đoạn 1 (Lúc Build Image):** Đọc `dockerfile`, chạy `RUN npm install` và nén toàn bộ thư viện vào Image tại `/app/node_modules`. Lúc này Volumes chưa hề tồn tại.
+>   * **Giai đoạn 2 (Lúc Chạy Container từ Compose):** Docker tạo Anonymous Volume (ban đầu là ổ đĩa trống). **Phép thuật của Docker:** Khi gắn một volume trống vào đường dẫn đã có sẵn dữ liệu từ trong Image (`/app/node_modules`), Docker sẽ **tự động COPY toàn bộ thư viện từ Image đổ sang Volume ảo đó** để cất giữ an toàn.
+>   * *Khi nào cập nhật lại?* Chỉ khi bạn sửa `package.json` và build lại Image (Giai đoạn 1 diễn ra lại $\rightarrow$ tạo Image mới $\rightarrow$ Docker lại copy thư viện mới vào volume ở Giai đoạn 2).
+
+> [!TIP]
+> **Bản chất Hot Reload & Giải tỏa các nhầm lẫn về Ports / Args / Chạy lại Image:**
 >
-> 🤝 **Mối quan hệ:** **Dòng 2 chính là "ngoại lệ" của dòng 1.**
-> * Dòng 1 yêu cầu đồng bộ toàn bộ thư mục `/app` từ máy host vào container.
-> * Dòng 2 chặn lại và tạo ra một **"vùng cấm"** cô lập cho riêng `/app/node_modules`, giúp bảo vệ thư mục thư viện chuẩn Linux (được sinh ra khi build image) không bị máy thật (Windows) ghi đè làm hỏng ứng dụng.
+> 1. **Do đâu code thay đổi ở máy host thì trong Docker cập nhật theo (Hot Reload)?**
+>    * **Nhờ Bind Mount (`- .:/app`)**: Container "nhìn xuyên qua" ổ cứng máy host và dùng chung file vật lý. Khi bạn bấm Ctrl+S ở VS Code, file trong container đổi ngay với độ trễ bằng 0.
+>    * **Nhờ Dev Server (Vite) File Watcher**: Tiến trình `npm run dev` túc trực 24/7 trong container theo dõi file thay đổi và tự động biên dịch, đẩy giao diện mới lên trình duyệt mà không cần F5.
+>
+> 2. **Giải tỏa các nhầm lẫn kỹ thuật thường gặp:**
+>    * **Docker KHÔNG chạy lại Image:** Image sau khi build xong là một khối tĩnh đóng băng. Container đang chạy chỉ là một tiến trình (process). Container không bao giờ tự động "nhìn lại image để chạy lại".
+>    * **Port (`ports: - "5173:5173"`)**: Chỉ làm nhiệm vụ đục một lỗ xuyên qua firewall container để máy host truy cập `localhost:5173`. Port **không** có chức năng đồng bộ code hay cập nhật image.
+>    * **Args (`ARG`)**: Chỉ là các biến môi trường được truyền vào một lần duy nhất lúc build image (Build-time) và kết thúc nhiệm vụ ngay sau khi build xong.
 
 ---
 
-## 🔄 5. Vòng Đời Của Container & Cách Kết Nối Lại Khi Sử Dụng Sau Này
+## 5. Vòng Đời Của Container & Cách Kết Nối Lại Khi Sử Dụng Sau Này
 
 Nhiều người mới học Docker thường thắc mắc: **"Sau này muốn chạy lại dự án, có cần chạy lệnh `docker compose up` nữa hay không? Nếu chạy lại thì nó có tạo image và container mới làm nặng máy không?"**
 
@@ -372,7 +407,7 @@ services:
 
 ---
 
-## 📑 6. Bảng Tra Cứu Các Lệnh Docker Compose Thường Dùng
+## 6. Bảng Tra Cứu Các Lệnh Docker Compose Thường Dùng
 
 Khi làm việc với Docker Compose, hãy mở Terminal tại thư mục chứa tệp `compose.yaml` và sử dụng các câu lệnh sau:
 
@@ -390,7 +425,7 @@ Khi làm việc với Docker Compose, hãy mở Terminal tại thư mục chứa
 
 ---
 
-## 🔍 7. Giải Thích Chi Tiết Các Trường Cấu Hình Trong YAML (Compose Specs)
+## 7. Giải Thích Chi Tiết Các Trường Cấu Hình Trong YAML (Compose Specs)
 
 Dưới đây là phần phân tích chi tiết ý nghĩa và vai trò của từng trường (key/field) xuất hiện trong cả file tự cấu hình và file gợi ý mặc định (`compose_Init.yaml`):
 
